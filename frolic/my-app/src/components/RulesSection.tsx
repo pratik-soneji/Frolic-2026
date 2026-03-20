@@ -3,7 +3,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ScrollText, ChevronRight, Circle } from "lucide-react";
+import { ScrollText, Circle } from "lucide-react";
 
 // Static Data
 const generalRules = [
@@ -40,11 +40,7 @@ const generalRules = [
 
 export default function RulesSection() {
   return (
-    <section id="rules" className="relative w-full bg-[#04070f] py-24 text-white overflow-hidden">
-
-      {/* Ambient Background Glows */}
-      <div className="pointer-events-none absolute top-1/4 left-[-10%] h-[40rem] w-[40rem] bg-[#1E3A8A]/15 blur-[150px] rounded-full" />
-      <div className="pointer-events-none absolute bottom-1/4 right-[-10%] h-[40rem] w-[40rem] bg-[#4F46E5]/15 blur-[150px] rounded-full" />
+    <section id="rules" className="relative w-full bg-muted/30 py-24 text-foreground overflow-hidden border-t border-border/40">
 
       <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-20">
 
@@ -52,38 +48,38 @@ export default function RulesSection() {
         <div className="flex flex-col items-center text-center mb-14">
           <Badge
             variant="outline"
-            className="mb-4 px-4 py-1.5 rounded-full border-sky-500/30 bg-sky-500/10 text-sky-300 uppercase tracking-widest text-xs font-semibold"
+            className="mb-4 px-4 py-1.5 rounded-full border-border/60 bg-background text-foreground/50 uppercase tracking-widest text-xs font-semibold"
           >
-            <ScrollText className="w-3 h-3 mr-2 text-sky-400" />
+            <ScrollText className="w-3 h-3 mr-2 text-foreground/40" />
             Important Information
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight">
-            GENERAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-[#4F46E5]">RULES</span>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+            GENERAL <span className="text-foreground/40">RULES</span>
           </h2>
-          <div className="mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600" />
+          <div className="mt-4 h-px w-20 rounded-full bg-border" />
         </div>
 
         {/* Rules Card */}
-        <Card className="border-zinc-800/60 bg-zinc-900/50 backdrop-blur-sm shadow-[0_0_60px_-20px_rgba(14,165,233,0.1)]">
+        <Card className="border-border/60 bg-card shadow-sm">
           <CardContent className="p-8 md:p-10">
-            <ul className="space-y-4 text-zinc-300 leading-relaxed">
+            <ul className="space-y-4 text-foreground/70 leading-relaxed">
               {generalRules.map((rule, index) => (
                 <li key={index} className="flex items-start gap-4 group/item">
                   {/* Number badge */}
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1E3A8A]/80 border border-sky-800/60 text-xs font-bold text-sky-300 mt-0.5">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06] border border-border/60 text-xs font-bold text-foreground/50 mt-0.5">
                     {index + 1}
                   </span>
                   <div className="flex-1">
                     {typeof rule === 'string' ? (
-                      <p className="text-sm md:text-base leading-relaxed group-hover/item:text-white transition-colors duration-200">{rule}</p>
+                      <p className="text-sm md:text-base leading-relaxed group-hover/item:text-foreground transition-colors duration-200">{rule}</p>
                     ) : (
                       <>
-                        <p className="text-sm md:text-base leading-relaxed group-hover/item:text-white transition-colors duration-200">{rule.text}</p>
-                        <ul className="mt-3 ml-2 space-y-2 pl-5 border-l border-sky-900/60">
+                        <p className="text-sm md:text-base leading-relaxed group-hover/item:text-foreground transition-colors duration-200">{rule.text}</p>
+                        <ul className="mt-3 ml-2 space-y-2 pl-5 border-l border-border/60">
                           {rule.subRules.map((subRule, subIndex) => (
                             <li key={subIndex} className="flex items-start gap-2.5">
-                              <Circle className="h-1.5 w-1.5 min-w-[0.375rem] fill-sky-400 text-sky-400 mt-2" />
-                              <p className="text-sm text-zinc-400">{subRule}</p>
+                              <Circle className="h-1.5 w-1.5 min-w-[0.375rem] fill-foreground/30 text-foreground/30 mt-2" />
+                              <p className="text-sm text-muted-foreground">{subRule}</p>
                             </li>
                           ))}
                         </ul>

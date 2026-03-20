@@ -1,11 +1,4 @@
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useForm } from "react-hook-form"
 import { useLogin } from "@/api/auth.queries"
 import { NavLink } from "react-router-dom"
-import { GraduationCap, ShieldCheck, CalendarDays, Trophy } from "lucide-react"
+import { GraduationCap, ArrowRight, Activity, Cpu, Box, Trophy } from "lucide-react"
 
 export interface loginFormProps {
   email: string
@@ -36,42 +29,49 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="min-h-screen w-full flex bg-background text-foreground selection:bg-foreground/10">
+      
       {/* LEFT PANEL — Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#1E3A8A] via-[#1e40af] to-[#4F46E5] p-12">
-        {/* Decorative blobs */}
-        <div className="pointer-events-none absolute top-[-10%] left-[-10%] h-72 w-72 rounded-full bg-sky-500/20 blur-[100px]" />
-        <div className="pointer-events-none absolute bottom-[-10%] right-[-10%] h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px]" />
-
-        {/* Content */}
-        <div className="relative z-10 max-w-md text-center">
-          {/* Logo */}
-          <div className="mb-8 inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-xl">
-            <GraduationCap className="h-10 w-10 text-white" />
+      <div className="hidden lg:flex lg:w-[45%] relative flex-col items-center justify-center p-14 border-r border-border bg-muted/20 overflow-hidden">
+        {/* Apple-style clean background gradients */}
+        <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-foreground/[0.02] rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50rem] h-[50rem] bg-foreground/[0.015] rounded-full blur-[120px] pointer-events-none" />
+        
+        <div className="relative z-10 max-w-md w-full">
+          <div className="mb-10 inline-flex">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground text-background shadow-lg shadow-foreground/10">
+              <GraduationCap className="h-7 w-7" />
+            </div>
           </div>
 
-          <h1 className="text-5xl font-black tracking-tighter text-white mb-2">
-            FROLIC
-            <span className="block text-sky-300">2026</span>
-          </h1>
-          <p className="mt-4 text-blue-200 text-base leading-relaxed">
-            Darshan University's Premier State-Level Cultural &amp; Technical Fest
+          <p className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+            Darshan University
           </p>
 
-          <Separator className="my-8 bg-white/20" />
+          <h1 className="text-5xl font-black tracking-tight leading-tight">
+            FROLIC 2026
+          </h1>
+          
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-sm">
+            The premier state-level technical symposium. Elevate your skills.
+          </p>
 
-          {/* Feature bullets */}
-          <div className="space-y-4 text-left">
+          <Separator className="my-10 bg-border/60" />
+
+          <div className="space-y-6">
             {[
-              { icon: CalendarDays, label: "Register for 50+ events" },
-              { icon: Trophy, label: "Win exciting cash prizes" },
-              { icon: ShieldCheck, label: "Secure student portal" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10 border border-white/20">
-                  <Icon className="h-4 w-4 text-sky-300" />
+              { icon: Activity, title: "Compete", label: "Join over 50+ cutting-edge events." },
+              { icon: Trophy, title: "Win", label: "Massive cash prizes and trophies." },
+              { icon: Cpu, title: "Innovate", label: "Showcase your best technical skills." },
+            ].map(({ icon: Icon, title, label }) => (
+              <div key={title} className="flex gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card border border-border/80 shadow-sm text-foreground">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <span className="text-sm font-medium text-blue-100">{label}</span>
+                <div>
+                  <h3 className="font-semibold text-foreground text-sm">{title}</h3>
+                  <p className="text-sm text-muted-foreground leading-snug mt-0.5">{label}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -79,107 +79,99 @@ export default function Login() {
       </div>
 
       {/* RIGHT PANEL — Form */}
-      <div className="flex w-full lg:w-1/2 flex-col items-center justify-center bg-[#F8FAFC] px-6 py-12">
-        {/* Mobile brand */}
-        <div className="mb-8 text-center lg:hidden">
-          <div className="mx-auto mb-3 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#4F46E5]">
-            <GraduationCap className="h-7 w-7 text-white" />
+      <div className="flex w-full lg:w-[55%] flex-col items-center justify-center relative px-6 py-12">
+        {/* Mobile brand hidden on desktop */}
+        <div className="mb-10 text-center lg:hidden relative z-10 flex flex-col items-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground text-background shadow-lg">
+             <GraduationCap className="h-7 w-7" />
           </div>
-          <span className="block text-2xl font-black tracking-tight text-[#0F172A]">
-            Frolic <span className="text-[#1E3A8A]">2026</span>
-          </span>
-          <p className="mt-1 text-sm text-slate-500">Darshan University</p>
+          <span className="block text-3xl font-black tracking-tight">FROLIC 2026</span>
+          <p className="mt-1 text-sm text-muted-foreground">Darshan University</p>
         </div>
 
-        <Card className="w-full max-w-[440px] shadow-xl border-[#E2E8F0] bg-white">
-          {/* Blue accent top bar */}
-          <div className="h-1 w-full rounded-t-lg bg-gradient-to-r from-[#1E3A8A] via-[#4F46E5] to-[#0EA5E9]" />
+        <div className="relative w-full max-w-[380px]">
+          
+          <div className="mb-8 text-center sm:text-left">
+            <h2 className="text-[28px] font-bold tracking-tight text-foreground">Sign in</h2>
+            <p className="mt-2 text-sm text-muted-foreground">Enter your credentials to continue</p>
+          </div>
 
-          <CardHeader className="space-y-1 pt-6 pb-4">
-            <CardTitle className="text-2xl font-bold tracking-tight text-[#0F172A]">
-              Welcome back
-            </CardTitle>
-            <CardDescription className="text-slate-500">
-              Sign in to your Frolic student account
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              {/* Email */}
-              <div className="space-y-2">
-                <Label htmlFor="login-email" className="text-sm font-medium text-[#0F172A]">
-                  Email address
-                </Label>
-                <Input
-                  id="login-email"
-                  {...register("email", { required: "Email is required" })}
-                  placeholder="you@example.com"
-                  type="text"
-                  className="h-11 border-[#E2E8F0] focus-visible:ring-[#1E3A8A] bg-[#F8FAFC]"
-                />
-                {errors.email && (
-                  <p className="text-xs text-destructive">{String(errors.email.message)}</p>
-                )}
-              </div>
-
-              {/* Password */}
-              <div className="space-y-2">
-                <Label htmlFor="login-password" className="text-sm font-medium text-[#0F172A]">
-                  Password
-                </Label>
-                <Input
-                  id="login-password"
-                  type="password"
-                  {...register("password", { required: "Password is required" })}
-                  placeholder="••••••••"
-                  className="h-11 border-[#E2E8F0] focus-visible:ring-[#1E3A8A] bg-[#F8FAFC]"
-                />
-                {errors.password && (
-                  <p className="text-xs text-destructive">{String(errors.password.message)}</p>
-                )}
-              </div>
-
-              {/* Remember me row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Checkbox id="login-remember" defaultChecked />
-                  <Label htmlFor="login-remember" className="text-sm font-normal text-slate-500 cursor-pointer">
-                    Remember me
-                  </Label>
-                </div>
-                <NavLink
-                  to="/signup"
-                  className="text-sm text-[#1E3A8A] hover:text-[#4F46E5] font-medium transition-colors"
-                >
-                  Don't have an account?
-                </NavLink>
-              </div>
-
-              {/* API Error */}
-              {error && (
-                <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-                  <p className="text-sm text-red-600 text-center">
-                    {String((error as any).response?.data?.message ?? "Login failed")}
-                  </p>
-                </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            {/* Email */}
+            <div className="space-y-2">
+              <Label htmlFor="login-email" className="text-xs font-semibold text-muted-foreground uppercase tracking-widest pl-1">
+                Email
+              </Label>
+              <Input
+                id="login-email"
+                {...register("email", { required: "Email is required" })}
+                placeholder="you@example.com"
+                type="text"
+                className="h-12 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all text-base px-4"
+              />
+              {errors.email && (
+                <p className="text-xs text-red-500 pl-1">{String(errors.email.message)}</p>
               )}
+            </div>
 
-              <Button
-                type="submit"
-                disabled={isPending}
-                className="w-full h-11 font-semibold bg-gradient-to-r from-[#1E3A8A] to-[#4F46E5] hover:from-[#1e40af] hover:to-[#4338ca] text-white shadow-md hover:shadow-lg transition-all duration-200 border-0"
+            {/* Password */}
+            <div className="space-y-2">
+              <Label htmlFor="login-password" className="text-xs font-semibold text-muted-foreground uppercase tracking-widest pl-1">
+                Password
+              </Label>
+              <Input
+                id="login-password"
+                type="password"
+                {...register("password", { required: "Password is required" })}
+                placeholder="••••••••"
+                className="h-12 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all text-base px-4 font-mono tracking-widest"
+              />
+              {errors.password && (
+                <p className="text-xs text-red-500 pl-1">{String(errors.password.message)}</p>
+              )}
+            </div>
+
+            {/* Remember me row */}
+            <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center gap-2.5 pl-1">
+                <Checkbox id="login-remember" defaultChecked className="border-muted-foreground/40 data-[state=checked]:bg-foreground data-[state=checked]:border-foreground rounded-[4px]" />
+                <Label htmlFor="login-remember" className="text-sm text-muted-foreground cursor-pointer font-medium select-none">
+                  Remember me
+                </Label>
+              </div>
+              <NavLink
+                to="/signup"
+                className="text-sm font-semibold text-foreground hover:text-foreground/70 transition-colors"
               >
-                {isPending ? "Signing in…" : "Sign in"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+                 Create an account
+              </NavLink>
+            </div>
 
-        <p className="mt-6 text-xs text-slate-400 text-center">
-          By continuing, you agree to Frolic's{" "}
-          <span className="underline cursor-pointer hover:text-[#1E3A8A] transition-colors">Terms of Service</span>
-        </p>
+            {/* API Error */}
+            {error && (
+              <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 mt-2">
+                <p className="text-sm font-medium text-red-600 dark:text-red-400 text-center">
+                  {String((error as any).response?.data?.message ?? "Login failed")}
+                </p>
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full h-12 mt-4 font-semibold bg-foreground hover:bg-foreground/90 text-background shadow-md transition-all rounded-xl text-base flex justify-center items-center gap-2 group"
+            >
+              {isPending ? "Authenticating…" : "Continue"}
+            </Button>
+          </form>
+
+          <div className="mt-8 text-center flex items-center justify-center gap-2 text-xs text-muted-foreground font-medium">
+            <span>By proceeding, you agree to our</span>
+            <span className="text-foreground hover:underline cursor-pointer">Terms</span>
+            <span>&amp;</span>
+            <span className="text-foreground hover:underline cursor-pointer">Privacy</span>
+          </div>
+        </div>
       </div>
     </div>
   )

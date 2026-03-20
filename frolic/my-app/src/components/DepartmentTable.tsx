@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -35,14 +35,9 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-} from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 import {
     School,
@@ -51,6 +46,8 @@ import {
     UserCheck,
     UserX,
     Check,
+    Search,
+    X,
 } from "lucide-react";
 import {
     useGetDepartments,
@@ -95,11 +92,11 @@ function getInitials(name: string) {
 }
 
 const avatarColors = [
-    "bg-blue-100 text-blue-700",
-    "bg-indigo-100 text-indigo-700",
-    "bg-sky-100 text-sky-700",
-    "bg-violet-100 text-violet-700",
-    "bg-teal-100 text-teal-700",
+    "bg-blue-500/15 text-blue-600 dark:text-blue-400",
+    "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400",
+    "bg-sky-500/15 text-sky-600 dark:text-sky-400",
+    "bg-violet-500/15 text-violet-600 dark:text-violet-400",
+    "bg-teal-500/15 text-teal-600 dark:text-teal-400",
 ];
 
 function getAvatarColor(name: string) {
@@ -107,7 +104,7 @@ function getAvatarColor(name: string) {
     return avatarColors[code % avatarColors.length];
 }
 
-// ── Inline Coordinator Picker ─────────────────────────────────
+// ── Inline Coordinator Picker (polished) ─────────────────────
 function CoordinatorPicker({
     department,
     coordinators,
@@ -118,35 +115,44 @@ function CoordinatorPicker({
     isLoading: boolean;
 }) {
     const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState("");
     const { mutate: assignCoordinator, isPending } = useUpdateDepartmentCoordinator();
     const current = department.departmentCoOrdinatorId;
+
+    const filtered = useMemo(() =>
+        coordinators.filter((c) =>
+            c.userName.toLowerCase().includes(search.toLowerCase()) ||
+            c.email.toLowerCase().includes(search.toLowerCase())
+        ),
+        [coordinators, search]
+    );
 
     const handleSelect = (coordId: string) => {
         const newId = current?._id === coordId ? null : coordId;
         assignCoordinator(
             { departmentid: department._id, departmentCoOrdinatorId: newId },
-            { onSuccess: () => setOpen(false) }
+            { onSuccess: () => { setOpen(false); setSearch(""); } }
         );
     };
 
     const handleUnassign = () => {
         assignCoordinator(
             { departmentid: department._id, departmentCoOrdinatorId: null },
-            { onSuccess: () => setOpen(false) }
+            { onSuccess: () => { setOpen(false); setSearch(""); } }
         );
     };
 
     return (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={(v) => { setOpen(v); if (!v) setSearch(""); }}>
             <PopoverTrigger asChild>
                 <Button
                     variant="ghost"
                     size="sm"
-                    className="h-8 gap-2 px-2 text-slate-500 hover:text-[#1E3A8A] hover:bg-blue-50 transition-all text-xs font-medium"
+                    className="h-8 gap-2 px-2.5 text-xs font-medium transition-all rounded-lg text-foreground/50 hover:text-foreground hover:bg-foreground/[0.06]"
                     disabled={isPending}
                 >
                     {isPending ? (
-                        <span className="text-xs text-slate-400">Updating…</span>
+                        <span className="text-xs text-foreground/30">Updating…</span>
                     ) : current ? (
                         <>
                             <Avatar className="h-5 w-5">
@@ -159,68 +165,127 @@ function CoordinatorPicker({
                         </>
                     ) : (
                         <>
-                            <UserX className="h-3.5 w-3.5 text-slate-400" />
+                            <UserX className="h-3.5 w-3.5 text-foreground/30" />
                             <span>Assign</span>
                         </>
                     )}
                 </Button>
             </PopoverTrigger>
 
-            <PopoverContent align="start" side="bottom" className="w-64 p-2 border-[#E2E8F0] shadow-xl">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 px-2 mb-2">
-                    Select Coordinator
-                </p>
-
-                {isLoading ? (
-                    <div className="space-y-2 py-1">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="flex items-center gap-2 px-2 py-1">
-                                <Skeleton className="h-7 w-7 rounded-full" />
-                                <Skeleton className="h-4 w-32" />
-                            </div>
-                        ))}
-                    </div>
-                ) : coordinators.length === 0 ? (
-                    <p className="text-xs text-amber-600 px-2 py-2">
-                        No <strong>Department Coordinators</strong> found. Go to Users and set a user's role to "Department Coordinator".
+            <PopoverContent
+                align="start"
+                side="bottom"
+                className="w-72 p-0 overflow-hidden rounded-xl border border-border/60 bg-popover"
+                style={{ boxShadow: "0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04)" }}
+            >
+                {/* Header + Search */}
+                <div className="px-3 pt-3 pb-2">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/35 mb-2">
+                        Assign Coordinator
                     </p>
-                ) : (
-                    <div className="space-y-0.5 max-h-56 overflow-y-auto pr-1">
-                        {coordinators.map((coord) => {
-                            const isSelected = current?._id === coord._id;
-                            return (
-                                <button
-                                    key={coord._id}
-                                    onClick={() => handleSelect(coord._id)}
-                                    className={`w-full flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors cursor-pointer border-none
-                    ${isSelected ? "bg-blue-50 text-[#1E3A8A]" : "hover:bg-slate-50 text-[#0F172A]"}`}
-                                >
-                                    <Avatar className="h-7 w-7 shrink-0">
-                                        <AvatarFallback className={`text-[10px] font-bold ${getAvatarColor(coord.userName)}`}>
-                                            {getInitials(coord.userName)}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-1 min-w-0 leading-tight">
-                                        <p className="text-sm font-medium truncate">{coord.userName}</p>
-                                        <p className="text-xs text-slate-400 truncate">{coord.email}</p>
-                                    </div>
-                                    {isSelected && <Check className="h-3.5 w-3.5 text-[#1E3A8A] shrink-0" />}
-                                </button>
-                            );
-                        })}
+                    <div className="relative">
+                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                        <input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search coordinators…"
+                            className="w-full h-8 pl-8 pr-7 text-xs rounded-lg border border-border/60
+                                bg-background text-foreground placeholder:text-foreground/30
+                                focus:outline-none focus:ring-1 focus:ring-ring/40 transition-all"
+                        />
+                        {search && (
+                            <button
+                                onClick={() => setSearch("")}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground/60 transition-colors border-none bg-transparent cursor-pointer p-0"
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        )}
                     </div>
-                )}
+                </div>
 
-                {current && (
+                {/* List */}
+                <div className="pb-2">
+                    {isLoading ? (
+                        <div className="space-y-1 px-2 py-1">
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className="flex items-center gap-2.5 px-2 py-2">
+                                    <Skeleton className="h-8 w-8 rounded-full shrink-0" />
+                                    <div className="space-y-1.5 flex-1">
+                                        <Skeleton className="h-3 w-24" />
+                                        <Skeleton className="h-2.5 w-32" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : coordinators.length === 0 ? (
+                        <div className="px-4 py-5 text-center">
+                            <UserX className="h-8 w-8 mx-auto mb-2 text-foreground/15" />
+                            <p className="text-xs text-foreground/40 leading-relaxed">
+                                No <strong className="font-semibold">Department Coordinators</strong> found.<br />
+                                Set a user's role to "Department Coordinator" first.
+                            </p>
+                        </div>
+                    ) : filtered.length === 0 ? (
+                        <div className="px-4 py-4 text-center">
+                            <p className="text-xs text-foreground/40">No results for "{search}"</p>
+                        </div>
+                    ) : (
+                        <ScrollArea className="max-h-52">
+                            <div className="space-y-0.5 px-2">
+                                {filtered.map((coord) => {
+                                    const isSelected = current?._id === coord._id;
+                                    return (
+                                        <button
+                                            key={coord._id}
+                                            onClick={() => handleSelect(coord._id)}
+                                            className={`w-full flex items-center gap-2.5 rounded-lg px-2 py-2 text-left
+                                                transition-all duration-150 cursor-pointer border-none outline-none
+                                                ${isSelected
+                                                    ? "bg-foreground/[0.07] text-foreground ring-1 ring-foreground/10"
+                                                    : "text-foreground/70 hover:text-foreground hover:bg-foreground/[0.05]"
+                                                }`}
+                                        >
+                                            <Avatar className={`h-8 w-8 shrink-0 ${isSelected ? "ring-2 ring-foreground/15" : ""}`}>
+                                                <AvatarFallback className={`text-[10px] font-bold ${getAvatarColor(coord.userName)}`}>
+                                                    {getInitials(coord.userName)}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div className="flex-1 min-w-0 leading-tight">
+                                                <p className={`text-[13px] font-medium truncate ${isSelected ? "text-foreground" : ""}`}>
+                                                    {coord.userName}
+                                                </p>
+                                                <p className="text-[11px] text-foreground/40 truncate">{coord.email}</p>
+                                            </div>
+                                            {isSelected && (
+                                                <div className="shrink-0 h-5 w-5 flex items-center justify-center rounded-full bg-emerald-500/15">
+                                                    <Check className="h-3 w-3 text-emerald-500" />
+                                                </div>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </ScrollArea>
+                    )}
+                </div>
+
+                {/* Unassign */}
+                {current && !isLoading && (
                     <>
-                        <div className="my-2 h-px bg-[#E2E8F0]" />
-                        <button
-                            onClick={handleUnassign}
-                            className="w-full flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-red-500 hover:bg-red-50 transition-colors border-none cursor-pointer"
-                        >
-                            <UserX className="h-3.5 w-3.5" />
-                            Remove coordinator
-                        </button>
+                        <Separator className="bg-border/50" />
+                        <div className="p-2">
+                            <button
+                                onClick={handleUnassign}
+                                className="w-full flex items-center gap-2 rounded-lg px-2.5 py-2 text-left
+                                    text-red-500 hover:bg-red-500/[0.08] transition-colors border-none cursor-pointer text-xs font-medium"
+                            >
+                                <div className="h-5 w-5 flex items-center justify-center rounded-full bg-red-500/10">
+                                    <UserX className="h-3 w-3 text-red-500" />
+                                </div>
+                                Remove coordinator
+                            </button>
+                        </div>
                     </>
                 )}
             </PopoverContent>
@@ -285,202 +350,194 @@ export default function DepartmentTable() {
     };
 
     return (
-        <Card className="border-[#E2E8F0] shadow-sm bg-white overflow-hidden">
-            {/* Blue gradient top bar */}
-            <div className="h-1 w-full bg-gradient-to-r from-[#1E3A8A] via-[#4F46E5] to-[#0EA5E9]" />
-
-            <CardHeader className="pb-4 bg-white">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#4F46E5] shadow-sm">
-                            <School className="h-5 w-5 text-white" />
-                        </div>
-                        <div>
-                            <CardTitle className="text-lg font-bold text-[#0F172A]">Departments</CardTitle>
-                            <CardDescription className="text-sm text-slate-500">
-                                Manage departments — click coordinator cell to assign
-                            </CardDescription>
-                        </div>
+        <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-border/60">
+                <div className="flex items-center gap-3.5">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-foreground/[0.05] border border-border/60">
+                        <School className="h-5 w-5 text-foreground/70" />
                     </div>
-
-                    <div className="flex items-center gap-3">
-                        <Badge variant="outline" className="text-xs font-semibold border-blue-200 text-[#1E3A8A] bg-blue-50">
-                            {isLoading ? "Loading…" : `${departments.length} departments`}
-                        </Badge>
-
-                        {/* ── Add Department Dialog ── */}
-                        <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-                            <DialogTrigger asChild>
-                                <Button className="h-9 rounded-lg bg-gradient-to-r from-[#1E3A8A] to-[#4F46E5] hover:from-[#1e40af] hover:to-[#4338ca] text-white font-semibold text-sm shadow-sm hover:shadow-md transition-all border-0 gap-1.5">
-                                    <Plus className="h-4 w-4" />
-                                    Add Department
-                                </Button>
-                            </DialogTrigger>
-
-                            <DialogContent className="sm:max-w-[480px] border-[#E2E8F0] bg-white shadow-2xl">
-                                <div className="absolute top-0 left-0 right-0 h-1 rounded-t-lg bg-gradient-to-r from-[#1E3A8A] via-[#4F46E5] to-[#0EA5E9]" />
-
-                                <DialogHeader className="pt-4">
-                                    <div className="flex items-center gap-3 mb-1">
-                                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#1E3A8A] to-[#4F46E5]">
-                                            <School className="h-4 w-4 text-white" />
-                                        </div>
-                                        <div>
-                                            <DialogTitle className="text-lg font-bold text-[#0F172A]">Add New Department</DialogTitle>
-                                            <DialogDescription className="text-slate-500 text-sm">Fill in the details to create a department.</DialogDescription>
-                                        </div>
-                                    </div>
-                                </DialogHeader>
-
-                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 py-2">
-                                    {/* Department Name */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="departmentName" className="text-sm font-semibold text-[#0F172A]">
-                                            Department Name <span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="departmentName"
-                                            {...register("departmentName", { required: "Department name is required" })}
-                                            placeholder="e.g. Computer Science"
-                                            className="h-11 border-[#E2E8F0] focus-visible:ring-[#1E3A8A] bg-[#F8FAFC]"
-                                        />
-                                        {errors.departmentName && (
-                                            <p className="text-xs text-red-500">{String(errors.departmentName.message)}</p>
-                                        )}
-                                    </div>
-
-                                    {/* Description */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="departmentDescription" className="text-sm font-semibold text-[#0F172A]">Description</Label>
-                                        <textarea
-                                            id="departmentDescription"
-                                            {...register("departmentDescription")}
-                                            placeholder="Brief description of the department…"
-                                            rows={3}
-                                            className="w-full rounded-md border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-sm text-[#0F172A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all resize-none"
-                                        />
-                                    </div>
-
-                                    {/* Institute Dropdown */}
-                                    <div className="space-y-2">
-                                        <Label className="text-sm font-semibold text-[#0F172A]">
-                                            <span className="flex items-center gap-1.5">
-                                                <Building2 className="h-3.5 w-3.5 text-[#1E3A8A]" />
-                                                Institute <span className="text-red-500">*</span>
-                                            </span>
-                                        </Label>
-                                        <Select
-                                            value={selectedInstitute}
-                                            onValueChange={setSelectedInstitute}
-                                            disabled={institutesLoading}
-                                        >
-                                            <SelectTrigger className="h-11 border-[#E2E8F0] bg-[#F8FAFC] focus:ring-[#1E3A8A] text-sm">
-                                                <SelectValue placeholder={institutesLoading ? "Loading…" : institutes.length === 0 ? "No institutes found" : "Select an institute"} />
-                                            </SelectTrigger>
-                                            <SelectContent className="border-[#E2E8F0] shadow-lg">
-                                                {institutes.map((inst) => (
-                                                    <SelectItem key={inst._id} value={inst._id} className="cursor-pointer hover:bg-blue-50">
-                                                        <div className="flex items-center gap-2">
-                                                            <Building2 className="h-3.5 w-3.5 text-[#1E3A8A]" />
-                                                            <span>{inst.instituteName}</span>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        {!selectedInstitute && (
-                                            <p className="text-xs text-slate-400">Institute is required</p>
-                                        )}
-                                    </div>
-
-                                    {/* Coordinator Dropdown */}
-                                    <div className="space-y-2">
-                                        <Label className="text-sm font-semibold text-[#0F172A]">
-                                            <span className="flex items-center gap-1.5">
-                                                <UserCheck className="h-3.5 w-3.5 text-[#1E3A8A]" />
-                                                Department Coordinator
-                                            </span>
-                                        </Label>
-                                        <Select
-                                            value={selectedCoordinator}
-                                            onValueChange={setSelectedCoordinator}
-                                            disabled={usersLoading}
-                                        >
-                                            <SelectTrigger className="h-11 border-[#E2E8F0] bg-[#F8FAFC] focus:ring-[#1E3A8A] text-sm">
-                                                <SelectValue placeholder={usersLoading ? "Loading…" : departmentCoordinators.length === 0 ? "No dept coordinators available" : "Select a coordinator (optional)"} />
-                                            </SelectTrigger>
-                                            <SelectContent className="border-[#E2E8F0] shadow-lg">
-                                                {departmentCoordinators.map((coord: Coordinator) => (
-                                                    <SelectItem key={coord._id} value={coord._id} className="cursor-pointer hover:bg-blue-50">
-                                                        <div className="flex items-center gap-2.5">
-                                                            <Avatar className="h-6 w-6">
-                                                                <AvatarFallback className={`text-[10px] font-bold ${getAvatarColor(coord.userName)}`}>
-                                                                    {getInitials(coord.userName)}
-                                                                </AvatarFallback>
-                                                            </Avatar>
-                                                            <div className="leading-tight">
-                                                                <p className="text-sm font-medium">{coord.userName}</p>
-                                                                <p className="text-xs text-slate-400">{coord.email}</p>
-                                                            </div>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-
-                                    {addError && (
-                                        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-                                            <p className="text-sm text-red-600">
-                                                {String((addError as any).response?.data?.message ?? "Failed to add department")}
-                                            </p>
-                                        </div>
-                                    )}
-
-                                    <DialogFooter className="pt-2 gap-2">
-                                        <Button type="button" variant="outline" onClick={() => handleDialogOpenChange(false)} className="border-[#E2E8F0] text-slate-600 hover:bg-slate-50">
-                                            Cancel
-                                        </Button>
-                                        <Button
-                                            type="submit"
-                                            disabled={isPending || !selectedInstitute}
-                                            className="bg-gradient-to-r from-[#1E3A8A] to-[#4F46E5] hover:from-[#1e40af] hover:to-[#4338ca] text-white font-semibold shadow-sm border-0"
-                                        >
-                                            {isPending ? "Creating…" : "Create Department"}
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
+                    <div>
+                        <h2 className="text-base font-bold text-foreground tracking-tight">Departments</h2>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                            Manage departments — click coordinator cell to assign
+                        </p>
                     </div>
                 </div>
-            </CardHeader>
 
-            <CardContent className="p-0">
+                <div className="flex items-center gap-3">
+                    <Badge variant="outline" className="text-xs font-semibold rounded-full">
+                        {isLoading ? "Loading…" : `${departments.length} departments`}
+                    </Badge>
+
+                    {/* ── Add Department Dialog ── */}
+                    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+                        <DialogTrigger asChild>
+                            <Button size="sm" className="h-9 rounded-lg gap-1.5 font-semibold">
+                                <Plus className="h-4 w-4" />
+                                Add Department
+                            </Button>
+                        </DialogTrigger>
+
+                        <DialogContent className="sm:max-w-[480px]">
+                            <DialogHeader>
+                                <div className="flex items-center gap-3 mb-1">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-background">
+                                        <School className="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <DialogTitle className="text-lg font-bold">Add New Department</DialogTitle>
+                                        <DialogDescription className="text-sm">Fill in the details to create a department.</DialogDescription>
+                                    </div>
+                                </div>
+                            </DialogHeader>
+
+                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 py-2">
+                                {/* Department Name */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="departmentName" className="text-sm font-semibold">
+                                        Department Name <span className="text-destructive">*</span>
+                                    </Label>
+                                    <Input
+                                        id="departmentName"
+                                        {...register("departmentName", { required: "Department name is required" })}
+                                        placeholder="e.g. Computer Science"
+                                        className="h-11"
+                                    />
+                                    {errors.departmentName && (
+                                        <p className="text-xs text-destructive">{String(errors.departmentName.message)}</p>
+                                    )}
+                                </div>
+
+                                {/* Description */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="departmentDescription" className="text-sm font-semibold">Description</Label>
+                                    <textarea
+                                        id="departmentDescription"
+                                        {...register("departmentDescription")}
+                                        placeholder="Brief description of the department…"
+                                        rows={3}
+                                        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all resize-none"
+                                    />
+                                </div>
+
+                                {/* Institute Dropdown */}
+                                <div className="space-y-2">
+                                    <Label className="text-sm font-semibold">
+                                        <span className="flex items-center gap-1.5">
+                                            <Building2 className="h-3.5 w-3.5" />
+                                            Institute <span className="text-destructive">*</span>
+                                        </span>
+                                    </Label>
+                                    <Select
+                                        value={selectedInstitute}
+                                        onValueChange={setSelectedInstitute}
+                                        disabled={institutesLoading}
+                                    >
+                                        <SelectTrigger className="h-11">
+                                            <SelectValue placeholder={institutesLoading ? "Loading…" : institutes.length === 0 ? "No institutes found" : "Select an institute"} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {institutes.map((inst) => (
+                                                <SelectItem key={inst._id} value={inst._id}>
+                                                    <div className="flex items-center gap-2">
+                                                        <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+                                                        <span>{inst.instituteName}</span>
+                                                    </div>
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    {!selectedInstitute && (
+                                        <p className="text-xs text-muted-foreground">Institute is required</p>
+                                    )}
+                                </div>
+
+                                {/* Coordinator Dropdown */}
+                                <div className="space-y-2">
+                                    <Label className="text-sm font-semibold">
+                                        <span className="flex items-center gap-1.5">
+                                            <UserCheck className="h-3.5 w-3.5" />
+                                            Department Coordinator
+                                        </span>
+                                    </Label>
+                                    <Select
+                                        value={selectedCoordinator}
+                                        onValueChange={setSelectedCoordinator}
+                                        disabled={usersLoading}
+                                    >
+                                        <SelectTrigger className="h-11">
+                                            <SelectValue placeholder={usersLoading ? "Loading…" : departmentCoordinators.length === 0 ? "No dept coordinators available" : "Select a coordinator (optional)"} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {departmentCoordinators.map((coord: Coordinator) => (
+                                                <SelectItem key={coord._id} value={coord._id}>
+                                                    <div className="flex items-center gap-2.5">
+                                                        <Avatar className="h-6 w-6">
+                                                            <AvatarFallback className={`text-[10px] font-bold ${getAvatarColor(coord.userName)}`}>
+                                                                {getInitials(coord.userName)}
+                                                            </AvatarFallback>
+                                                        </Avatar>
+                                                        <div className="leading-tight">
+                                                            <p className="text-sm font-medium">{coord.userName}</p>
+                                                            <p className="text-xs text-muted-foreground">{coord.email}</p>
+                                                        </div>
+                                                    </div>
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                {addError && (
+                                    <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3">
+                                        <p className="text-sm text-destructive">
+                                            {String((addError as any).response?.data?.message ?? "Failed to add department")}
+                                        </p>
+                                    </div>
+                                )}
+
+                                <DialogFooter className="pt-2 gap-2">
+                                    <Button type="button" variant="outline" onClick={() => handleDialogOpenChange(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        disabled={isPending || !selectedInstitute}
+                                    >
+                                        {isPending ? "Creating…" : "Create Department"}
+                                    </Button>
+                                </DialogFooter>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
+                </div>
+            </div>
+
+            <div className="p-0">
                 {isError && (
-                    <div className="mx-6 mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-                        <span className="text-sm text-red-600 font-medium">Failed to load departments. Please try again.</span>
+                    <div className="mx-6 mb-4 mt-4 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3">
+                        <span className="text-sm text-destructive font-medium">Failed to load departments. Please try again.</span>
                     </div>
                 )}
 
                 <Table>
                     <TableHeader>
-                        <TableRow className="hover:bg-transparent border-[#E2E8F0] bg-[#F8FAFC]">
-                            <TableHead className="pl-6 font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Department</TableHead>
-                            <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Institute</TableHead>
-                            <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Description</TableHead>
-                            <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">
+                        <TableRow className="hover:bg-transparent border-border/60 bg-muted/40">
+                            <TableHead className="pl-6 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Department</TableHead>
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Institute</TableHead>
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Description</TableHead>
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                                 Coordinator
-                                <span className="ml-1.5 text-[10px] normal-case text-slate-400 font-normal">(click to change)</span>
+                                <span className="ml-1.5 text-[9px] normal-case text-muted-foreground/60 font-normal">(click to change)</span>
                             </TableHead>
-                            <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Added</TableHead>
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Added</TableHead>
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
                         {isLoading
                             ? Array.from({ length: 4 }).map((_, i) => (
-                                <TableRow key={i} className="border-[#E2E8F0]">
+                                <TableRow key={i} className="border-border/40">
                                     <TableCell className="pl-6">
                                         <div className="flex items-center gap-3">
                                             <Skeleton className="h-8 w-8 rounded-lg" />
@@ -498,43 +555,43 @@ export default function DepartmentTable() {
                                     <TableRow>
                                         <TableCell colSpan={5}>
                                             <div className="flex flex-col items-center justify-center py-16 gap-3">
-                                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 border border-blue-100">
-                                                    <School className="h-7 w-7 text-[#1E3A8A]" />
+                                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground/[0.04] border border-border/60">
+                                                    <School className="h-7 w-7 text-foreground/30" />
                                                 </div>
-                                                <p className="text-sm font-medium text-slate-500">No departments yet</p>
-                                                <p className="text-xs text-slate-400">Click "Add Department" to register the first one.</p>
+                                                <p className="text-sm font-medium text-muted-foreground">No departments yet</p>
+                                                <p className="text-xs text-muted-foreground/60">Click "Add Department" to register the first one.</p>
                                             </div>
                                         </TableCell>
                                     </TableRow>
                                 )
                                 : departments.map((dept) => (
-                                    <TableRow key={dept._id} className="border-[#E2E8F0] hover:bg-blue-50/40 transition-colors">
+                                    <TableRow key={dept._id} className="border-border/40 hover:bg-muted/50 transition-colors">
                                         {/* Department Name */}
                                         <TableCell className="pl-6">
                                             <div className="flex items-center gap-3">
-                                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#1E3A8A]/10 to-[#4F46E5]/10 border border-blue-100">
-                                                    <School className="h-4 w-4 text-[#1E3A8A]" />
+                                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-foreground/[0.05] border border-border/60">
+                                                    <School className="h-4 w-4 text-foreground/60" />
                                                 </div>
-                                                <span className="font-semibold text-[#0F172A]">{dept.departmentName}</span>
+                                                <span className="font-semibold text-foreground">{dept.departmentName}</span>
                                             </div>
                                         </TableCell>
 
                                         {/* Institute Badge */}
                                         <TableCell>
                                             {dept.instituteId ? (
-                                                <Badge variant="outline" className="border-blue-200 text-[#1E3A8A] bg-blue-50 text-xs gap-1">
+                                                <Badge variant="outline" className="text-xs gap-1 rounded-full">
                                                     <Building2 className="h-3 w-3" />
                                                     {dept.instituteId.instituteName}
                                                 </Badge>
                                             ) : (
-                                                <span className="text-slate-400 text-xs italic">—</span>
+                                                <span className="text-muted-foreground text-xs italic">—</span>
                                             )}
                                         </TableCell>
 
                                         {/* Description */}
-                                        <TableCell className="text-slate-500 text-sm max-w-[180px]">
+                                        <TableCell className="text-muted-foreground text-sm max-w-[180px]">
                                             <p className="line-clamp-2">
-                                                {dept.departmentDescription || <span className="italic text-slate-400">—</span>}
+                                                {dept.departmentDescription || <span className="italic text-muted-foreground/50">—</span>}
                                             </p>
                                         </TableCell>
 
@@ -548,7 +605,7 @@ export default function DepartmentTable() {
                                         </TableCell>
 
                                         {/* Date */}
-                                        <TableCell className="text-slate-400 text-xs">
+                                        <TableCell className="text-muted-foreground text-xs">
                                             {new Date(dept.createdAt).toLocaleDateString("en-IN", {
                                                 day: "numeric",
                                                 month: "short",
@@ -559,7 +616,7 @@ export default function DepartmentTable() {
                                 ))}
                     </TableBody>
                 </Table>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 }

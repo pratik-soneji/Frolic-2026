@@ -10,43 +10,47 @@ import type { signupFormProps } from "@/components/pages/SignUp";
 import { useAuthStore } from "@/store/useAuthStore";
 
 type ApiError = {
-    message: string
-  }
+  message: string
+}
 export const useLogin = () => {
-  const navigate = useNavigate();
-  const setUser = useAuthStore.getState().setUser
+  const navigate = useNavigate()
+  const setUser = useAuthStore((s) => s.setUser)
+
   return useMutation<LoginResponse, AxiosError<ApiError>, loginFormProps>({
     mutationFn: login,
+
     onSuccess: (data) => {
-        setUser(data.user)
-        console.log(data);
-        if(data.user.isAdmin){
-          navigate('/admin')
-        }else{
-          navigate('/dashboard')        
-        }
-        
+      setUser(data.user)
+
+      if (data.user.isAdmin) {
+        navigate("/admin")
+      } else {
+        navigate("/")
+      }
     },
-    onError: ()=>{
-        console.log("Errr");
-        
-    }
+
+    onError: (err) => {
+      console.log(err.response?.data?.message)
+    },
   })
 }
 export const useRegister = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const setUser = useAuthStore((s) => s.setUser)
+
   return useMutation<LoginResponse, AxiosError<ApiError>, signupFormProps>({
     mutationFn: signup,
+
     onSuccess: (data) => {
-        console.log(data);
-        navigate('/dashboard')        
+      setUser(data.user)
+
+      navigate("/")
     },
-    onError: (err)=>{
-      console.log(err);
-      
-        console.log("sign up Errr");
-        
-    }
+
+    onError: (err) => {
+      console.log(err.response?.data?.message)
+    },
   })
 }
+
 

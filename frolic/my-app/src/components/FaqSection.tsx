@@ -57,11 +57,7 @@ const faqData = [
 
 export default function FaqSection() {
   return (
-    <section id="faq" className="relative w-full bg-[#04070f] py-24 text-white overflow-hidden">
-
-      {/* Ambient Background Glows */}
-      <div className="pointer-events-none absolute top-1/3 right-[-10%] h-[30rem] w-[30rem] bg-[#1E3A8A]/15 blur-[120px] rounded-full" />
-      <div className="pointer-events-none absolute bottom-1/3 left-[-10%] h-[30rem] w-[30rem] bg-[#4F46E5]/15 blur-[120px] rounded-full" />
+    <section id="faq" className="relative w-full bg-background py-24 text-foreground overflow-hidden border-t border-border/40">
 
       <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-20 max-w-4xl">
 
@@ -69,18 +65,16 @@ export default function FaqSection() {
         <div className="flex flex-col items-center text-center mb-14">
           <Badge
             variant="outline"
-            className="mb-4 px-4 py-1.5 rounded-full border-sky-500/30 bg-sky-500/10 text-sky-300 uppercase tracking-widest text-xs font-semibold"
+            className="mb-4 px-4 py-1.5 rounded-full border-border/60 bg-foreground/[0.04] text-foreground/50 uppercase tracking-widest text-xs font-semibold"
           >
-            <HelpCircle className="w-3 h-3 mr-2 text-sky-400" />
+            <HelpCircle className="w-3 h-3 mr-2 text-foreground/40" />
             Got Questions?
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
             FREQUENTLY ASKED{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-[#4F46E5]">
-              QUESTIONS
-            </span>
+            <span className="text-foreground/40">QUESTIONS</span>
           </h2>
-          <div className="mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600" />
+          <div className="mt-4 h-px w-20 rounded-full bg-border" />
         </div>
 
         {/* Accordion */}
@@ -89,18 +83,18 @@ export default function FaqSection() {
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="border border-zinc-800/60 bg-zinc-900/50 backdrop-blur-sm rounded-xl overflow-hidden transition-colors duration-200 hover:border-zinc-700/60 data-[state=open]:border-sky-500/40 data-[state=open]:bg-zinc-900/80 data-[state=open]:shadow-[0_0_30px_-10px_rgba(14,165,233,0.15)]"
+              className="border border-border/60 bg-card rounded-xl overflow-hidden transition-colors duration-200 hover:border-border data-[state=open]:border-border data-[state=open]:bg-card"
             >
-              <AccordionTrigger className="px-6 py-4 text-base font-semibold text-white/90 hover:text-white hover:no-underline text-left [&[data-state=open]>svg]:text-sky-400 [&[data-state=open]]:text-sky-200">
+              <AccordionTrigger className="px-6 py-4 text-base font-semibold text-foreground/80 hover:text-foreground hover:no-underline text-left data-[state=open]:text-foreground">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="px-6 pb-5 pt-0 text-zinc-400 text-sm leading-relaxed border-t border-zinc-800/40">
+              <AccordionContent className="px-6 pb-5 pt-0 text-muted-foreground text-sm leading-relaxed border-t border-border/40">
                 {Array.isArray(item.answer) ? (
                   <div className="space-y-3 pt-4">
                     {item.answer.map((part, i) =>
                       typeof part === 'string' ?
                         <p key={i}>{part}</p> :
-                        <ul key={i} className="list-disc pl-5 space-y-1 marker:text-sky-500">
+                        <ul key={i} className="list-disc pl-5 space-y-1 marker:text-foreground/40">
                           {part.items.map((listItem, j) => <li key={j}>{listItem}</li>)}
                         </ul>
                     )}

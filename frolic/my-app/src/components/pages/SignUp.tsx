@@ -1,21 +1,10 @@
-
 import { useForm } from "react-hook-form";
-
-// Shadcn UI Imports
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
 import { useRegister } from "@/api/auth.queries";
 import { NavLink } from "react-router-dom";
-import { GraduationCap, CalendarDays, Trophy, ShieldCheck } from "lucide-react";
+import { GraduationCap, Activity, Cpu, Trophy } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 export interface signupFormProps {
@@ -35,46 +24,53 @@ export default function RegisterPage() {
   const { mutate, isPending, error } = useRegister()
 
   const onSubmit = (formData: signupFormProps) => {
-    console.log(formData);
     mutate(formData)
-    console.log("finished");
   }
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="min-h-screen w-full flex bg-background text-foreground selection:bg-foreground/10">
+      
       {/* LEFT PANEL — Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#1E3A8A] via-[#1e40af] to-[#4F46E5] p-12">
-        {/* Decorative blobs */}
-        <div className="pointer-events-none absolute top-[-10%] left-[-10%] h-72 w-72 rounded-full bg-sky-500/20 blur-[100px]" />
-        <div className="pointer-events-none absolute bottom-[-10%] right-[-10%] h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px]" />
-
-        {/* Content */}
-        <div className="relative z-10 max-w-md text-center">
-          <div className="mb-8 inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-xl">
-            <GraduationCap className="h-10 w-10 text-white" />
+      <div className="hidden lg:flex lg:w-[45%] relative flex-col items-center justify-center p-14 border-r border-border bg-muted/20 overflow-hidden">
+        {/* Apple-style clean background gradients */}
+        <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-foreground/[0.02] rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50rem] h-[50rem] bg-foreground/[0.015] rounded-full blur-[120px] pointer-events-none" />
+        
+        <div className="relative z-10 max-w-md w-full">
+          <div className="mb-10 inline-flex">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground text-background shadow-lg shadow-foreground/10">
+              <GraduationCap className="h-7 w-7" />
+            </div>
           </div>
 
-          <h1 className="text-5xl font-black tracking-tighter text-white mb-2">
-            JOIN
-            <span className="block text-sky-300">FROLIC 2026</span>
-          </h1>
-          <p className="mt-4 text-blue-200 text-base leading-relaxed">
-            Create your student account and register for Darshan University's ultimate cultural &amp; technical fest.
+          <p className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+            Darshan University
           </p>
 
-          <Separator className="my-8 bg-white/20" />
+          <h1 className="text-5xl font-black tracking-tight leading-tight">
+            JOIN FROLIC
+          </h1>
+          
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-sm">
+            Create an account to register for events, form teams, and manage your participation.
+          </p>
 
-          <div className="space-y-4 text-left">
+          <Separator className="my-10 bg-border/60" />
+
+          <div className="space-y-6">
             {[
-              { icon: CalendarDays, label: "Access 50+ curated events" },
-              { icon: Trophy, label: "Compete for cash prizes &amp; trophies" },
-              { icon: ShieldCheck, label: "Instant e-certificate on participation" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10 border border-white/20">
-                  <Icon className="h-4 w-4 text-sky-300" />
+              { icon: Activity, title: "Compete", label: "Join over 50+ cutting-edge events." },
+              { icon: Trophy, title: "Win", label: "Massive cash prizes and trophies." },
+              { icon: Cpu, title: "Innovate", label: "Showcase your best technical skills." },
+            ].map(({ icon: Icon, title, label }) => (
+              <div key={title} className="flex gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card border border-border/80 shadow-sm text-foreground">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <span className="text-sm font-medium text-blue-100" dangerouslySetInnerHTML={{ __html: label }} />
+                <div>
+                  <h3 className="font-semibold text-foreground text-sm">{title}</h3>
+                  <p className="text-sm text-muted-foreground leading-snug mt-0.5">{label}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -82,135 +78,125 @@ export default function RegisterPage() {
       </div>
 
       {/* RIGHT PANEL — Form */}
-      <div className="flex w-full lg:w-1/2 flex-col items-center justify-center bg-[#F8FAFC] px-6 py-12">
-        {/* Mobile brand */}
-        <div className="mb-8 text-center lg:hidden">
-          <div className="mx-auto mb-3 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#4F46E5]">
-            <GraduationCap className="h-7 w-7 text-white" />
+      <div className="flex w-full lg:w-[55%] flex-col items-center justify-center relative px-6 py-10 lg:py-12 overflow-y-auto">
+        {/* Mobile brand hidden on desktop */}
+        <div className="mb-8 text-center lg:hidden relative z-10 flex flex-col items-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground text-background shadow-lg">
+             <GraduationCap className="h-7 w-7" />
           </div>
-          <span className="block text-2xl font-black tracking-tight text-[#0F172A]">
-            Frolic <span className="text-[#1E3A8A]">2026</span>
-          </span>
-          <p className="mt-1 text-sm text-slate-500">Darshan University</p>
+          <span className="block text-3xl font-black tracking-tight">FROLIC 2026</span>
+          <p className="mt-1 text-sm text-muted-foreground">Darshan University</p>
         </div>
 
-        <Card className="w-full max-w-[460px] shadow-xl border-[#E2E8F0] bg-white">
-          {/* Blue accent top bar */}
-          <div className="h-1 w-full rounded-t-lg bg-gradient-to-r from-[#1E3A8A] via-[#4F46E5] to-[#0EA5E9]" />
+        <div className="relative w-full max-w-[380px] my-auto">
+          
+          <div className="mb-8 text-center sm:text-left">
+            <h2 className="text-[28px] font-bold tracking-tight text-foreground">Create account</h2>
+            <p className="mt-2 text-sm text-muted-foreground">Enter your details to get started</p>
+          </div>
 
-          <CardHeader className="space-y-1 pt-6 pb-4">
-            <CardTitle className="text-2xl font-bold tracking-tight text-[#0F172A]">
-              Create an account
-            </CardTitle>
-            <CardDescription className="text-slate-500">
-              Join Frolic 2026 — the chaos begins here
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {/* Username */}
-              <div className="space-y-2">
-                <Label htmlFor="signup-username" className="text-sm font-medium text-[#0F172A]">
-                  Username
-                </Label>
-                <Input
-                  id="signup-username"
-                  {...register("userName", { required: "Username is required" })}
-                  placeholder="luffy"
-                  type="text"
-                  className="h-11 border-[#E2E8F0] focus-visible:ring-[#1E3A8A] bg-[#F8FAFC]"
-                />
-                {errors.userName && (
-                  <p className="text-xs text-destructive">{String(errors.userName.message)}</p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div className="space-y-2">
-                <Label htmlFor="signup-email" className="text-sm font-medium text-[#0F172A]">
-                  Email address
-                </Label>
-                <Input
-                  id="signup-email"
-                  {...register("email", { required: "Email is required" })}
-                  placeholder="you@example.com"
-                  type="text"
-                  className="h-11 border-[#E2E8F0] focus-visible:ring-[#1E3A8A] bg-[#F8FAFC]"
-                />
-                {errors.email && (
-                  <p className="text-xs text-destructive">{String(errors.email.message)}</p>
-                )}
-              </div>
-
-              {/* Password */}
-              <div className="space-y-2">
-                <Label htmlFor="signup-password" className="text-sm font-medium text-[#0F172A]">
-                  Password
-                </Label>
-                <Input
-                  id="signup-password"
-                  type="password"
-                  {...register("password", { required: "Password is required" })}
-                  placeholder="••••••••"
-                  className="h-11 border-[#E2E8F0] focus-visible:ring-[#1E3A8A] bg-[#F8FAFC]"
-                />
-                {errors.password && (
-                  <p className="text-xs text-destructive">{String(errors.password.message)}</p>
-                )}
-              </div>
-
-              {/* Phone */}
-              <div className="space-y-2">
-                <Label htmlFor="signup-phone" className="text-sm font-medium text-[#0F172A]">
-                  Phone number
-                </Label>
-                <Input
-                  id="signup-phone"
-                  type="number"
-                  {...register("phone", { required: "Phone number is required" })}
-                  placeholder="9876543210"
-                  className="h-11 border-[#E2E8F0] focus-visible:ring-[#1E3A8A] bg-[#F8FAFC]"
-                />
-                {errors.phone && (
-                  <p className="text-xs text-destructive">{String(errors.phone.message)}</p>
-                )}
-              </div>
-
-              {/* API Error */}
-              {error && (
-                <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-                  <p className="text-sm text-red-600 text-center">
-                    {String((error as any).response?.data?.message ?? "Signup failed")}
-                  </p>
-                </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Username */}
+            <div className="space-y-1.5">
+              <Label htmlFor="signup-username" className="text-xs font-semibold text-muted-foreground uppercase tracking-widest pl-1">
+                Username
+              </Label>
+              <Input
+                id="signup-username"
+                {...register("userName", { required: "Username is required" })}
+                placeholder="johndoe"
+                type="text"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4"
+              />
+              {errors.userName && (
+                <p className="text-xs text-red-500 pl-1">{String(errors.userName.message)}</p>
               )}
+            </div>
 
-              <Button
-                type="submit"
-                disabled={isPending}
-                className="w-full h-11 font-semibold bg-gradient-to-r from-[#1E3A8A] to-[#4F46E5] hover:from-[#1e40af] hover:to-[#4338ca] text-white shadow-md hover:shadow-lg transition-all duration-200 border-0"
-              >
-                {isPending ? "Creating account…" : "Create account"}
-              </Button>
+            {/* Email */}
+            <div className="space-y-1.5">
+              <Label htmlFor="signup-email" className="text-xs font-semibold text-muted-foreground uppercase tracking-widest pl-1">
+                Email
+              </Label>
+              <Input
+                id="signup-email"
+                {...register("email", { required: "Email is required" })}
+                placeholder="you@example.com"
+                type="email"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4"
+              />
+              {errors.email && (
+                <p className="text-xs text-red-500 pl-1">{String(errors.email.message)}</p>
+              )}
+            </div>
 
-              <p className="text-center text-sm text-slate-500">
-                Already have an account?{" "}
-                <NavLink
-                  to="/login"
-                  className="font-semibold text-[#1E3A8A] hover:text-[#4F46E5] transition-colors"
-                >
-                  Sign in
-                </NavLink>
-              </p>
-            </form>
-          </CardContent>
-        </Card>
+            {/* Password */}
+            <div className="space-y-1.5">
+              <Label htmlFor="signup-password" className="text-xs font-semibold text-muted-foreground uppercase tracking-widest pl-1">
+                Password
+              </Label>
+              <Input
+                id="signup-password"
+                type="password"
+                {...register("password", { required: "Password is required" })}
+                placeholder="••••••••"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4 font-mono tracking-widest"
+              />
+              {errors.password && (
+                <p className="text-xs text-red-500 pl-1">{String(errors.password.message)}</p>
+              )}
+            </div>
 
-        <p className="mt-6 text-xs text-slate-400 text-center">
-          By continuing, you agree to Frolic's{" "}
-          <span className="underline cursor-pointer hover:text-[#1E3A8A] transition-colors">Terms of Service</span>
-        </p>
+            {/* Phone */}
+            <div className="space-y-1.5">
+              <Label htmlFor="signup-phone" className="text-xs font-semibold text-muted-foreground uppercase tracking-widest pl-1">
+                Phone
+              </Label>
+              <Input
+                id="signup-phone"
+                type="number"
+                {...register("phone", { required: "Phone is required" })}
+                placeholder="9876543210"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4"
+              />
+              {errors.phone && (
+                <p className="text-xs text-red-500 pl-1">{String(errors.phone.message)}</p>
+              )}
+            </div>
+
+            {/* API Error */}
+            {error && (
+              <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 mt-2">
+                <p className="text-sm font-medium text-red-600 dark:text-red-400 text-center">
+                  {String((error as any).response?.data?.message ?? "Signup failed")}
+                </p>
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full h-11 mt-4 font-semibold bg-foreground hover:bg-foreground/90 text-background shadow-md transition-all rounded-xl flex justify-center items-center gap-2 group"
+            >
+              {isPending ? "Creating account…" : "Continue"}
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-muted-foreground font-medium">
+            <span>Already have an account? </span>
+            <NavLink
+              to="/login"
+              className="text-foreground hover:underline font-semibold transition-all"
+            >
+              Sign in
+            </NavLink>
+          </div>
+          
+          <div className="mt-8 text-center flex items-center justify-center gap-2 text-xs text-muted-foreground font-medium">
+            <span>By proceeding, you agree to our</span>
+            <span className="text-foreground hover:underline cursor-pointer">Terms</span>
+          </div>
+        </div>
       </div>
     </div>
   )

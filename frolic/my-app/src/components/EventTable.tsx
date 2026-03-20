@@ -14,19 +14,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 
-import { MoreHorizontal, CalendarDays } from "lucide-react";
+import { MoreHorizontal, CalendarDays, Eye, Pencil, Trash2 } from "lucide-react";
 import { apiAdmin } from "@/constants/api";
 import { useEffect, useState } from "react";
+import { AddEventDialog } from "./AddEventDialog";
 
 export interface Event {
   _id: string;
@@ -61,6 +56,7 @@ export interface EventsTableProps {
 export default function EventsTable() {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAddEventOpen, setIsAddEventOpen] = useState(false);
 
   const fetchEvents = async () => {
     try {
@@ -78,61 +74,65 @@ export default function EventsTable() {
   }, []);
 
   return (
-    <Card className="border-[#E2E8F0] shadow-sm bg-white overflow-hidden">
-      {/* Blue gradient top bar */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#1E3A8A] via-[#4F46E5] to-[#0EA5E9]" />
+    <>
+      <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
 
-      <CardHeader className="pb-4 bg-white">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#4F46E5] shadow-sm">
-              <CalendarDays className="h-5 w-5 text-white" />
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-border/60">
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-foreground/[0.05] border border-border/60">
+              <CalendarDays className="h-5 w-5 text-foreground/70" />
             </div>
             <div>
-              <CardTitle className="text-lg font-bold text-[#0F172A]">Events</CardTitle>
-              <CardDescription className="text-sm text-slate-500">
-                Manage Frolic 2026 events
-              </CardDescription>
+              <h2 className="text-base font-bold text-foreground tracking-tight">Events</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Manage Frolic 2026 events</p>
             </div>
           </div>
-          <Badge
-            variant="outline"
-            className="text-xs font-semibold border-blue-200 text-[#1E3A8A] bg-blue-50"
-          >
-            {isLoading ? "Loading…" : `${events.length} events`}
-          </Badge>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => setIsAddEventOpen(true)}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              Add Event
+            </Button>
+            <Badge
+              variant="outline"
+              className="text-xs font-semibold rounded-full px-3"
+            >
+              {isLoading ? "Loading…" : `${events.length} events`}
+            </Badge>
+          </div>
         </div>
-      </CardHeader>
 
-      <CardContent className="p-0">
+        {/* Table */}
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent border-[#E2E8F0] bg-[#F8FAFC]">
-              <TableHead className="pl-6 font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Event Name</TableHead>
-              <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Department ID</TableHead>
-              <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Fees</TableHead>
-              <TableHead className="text-right pr-6 font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Actions</TableHead>
+            <TableRow className="hover:bg-transparent border-border/60 bg-muted/40">
+              <TableHead className="pl-6 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Event Name</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Department ID</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Fees</TableHead>
+              <TableHead className="text-right pr-6 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {isLoading
               ? Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i} className="border-[#E2E8F0]">
+                <TableRow key={i} className="border-border/40">
                   <TableCell className="pl-6"><Skeleton className="h-4 w-36" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-28" /></TableCell>
-                  <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-                  <TableCell className="text-right pr-6"><Skeleton className="h-8 w-8 ml-auto rounded-md" /></TableCell>
+                  <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
+                  <TableCell className="text-right pr-6"><Skeleton className="h-7 w-7 ml-auto rounded-lg" /></TableCell>
                 </TableRow>
               ))
               : events.map((user) => (
-                <TableRow key={user._id} className="group border-[#E2E8F0] hover:bg-blue-50/50 transition-colors">
-                  <TableCell className="pl-6 font-semibold text-[#0F172A]">{user.eventName}</TableCell>
-                  <TableCell className="text-slate-500 text-sm font-mono">{user.departmentId}</TableCell>
+                <TableRow key={user._id} className="group border-border/40 hover:bg-muted/50 transition-colors">
+                  <TableCell className="pl-6 font-semibold text-foreground">{user.eventName}</TableCell>
+                  <TableCell className="text-muted-foreground text-xs font-mono">{user.departmentId}</TableCell>
                   <TableCell>
                     <Badge
                       variant="secondary"
-                      className="bg-emerald-50 text-emerald-700 border-emerald-200 font-semibold text-xs border"
+                      className="text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20 font-semibold text-xs border rounded-full"
                     >
                       ₹{user.evetFees}
                     </Badge>
@@ -140,15 +140,20 @@ export default function EventsTable() {
                   <TableCell className="text-right pr-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-100 hover:text-[#1E3A8A]">
+                        <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-all hover:bg-muted text-muted-foreground hover:text-foreground rounded-lg">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-36 border-[#E2E8F0] shadow-lg">
-                        <DropdownMenuItem className="cursor-pointer hover:bg-blue-50 hover:text-[#1E3A8A]">View</DropdownMenuItem>
-                        <DropdownMenuItem className="cursor-pointer hover:bg-blue-50 hover:text-[#1E3A8A]">Edit</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer focus:bg-red-50">
-                          Delete
+                      <DropdownMenuContent align="end" className="w-36 bg-popover border-border shadow-lg rounded-xl">
+                        <DropdownMenuItem className="cursor-pointer text-foreground/70 hover:bg-muted rounded-lg gap-2">
+                          <Eye className="h-3.5 w-3.5" /> View
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="cursor-pointer text-foreground/70 hover:bg-muted rounded-lg gap-2">
+                          <Pencil className="h-3.5 w-3.5" /> Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-border" />
+                        <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer focus:bg-destructive/10 rounded-lg gap-2">
+                          <Trash2 className="h-3.5 w-3.5" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -157,7 +162,16 @@ export default function EventsTable() {
               ))}
           </TableBody>
         </Table>
-      </CardContent>
-    </Card>
+      </div>
+
+      <AddEventDialog 
+        open={isAddEventOpen} 
+        onOpenChange={setIsAddEventOpen}
+        onSuccess={() => {
+          // Re-fetch events if needed when an event is added
+          fetchEvents();
+        }}
+      />
+    </>
   );
 }

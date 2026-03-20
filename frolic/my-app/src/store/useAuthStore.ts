@@ -1,6 +1,8 @@
-import type { User } from "@/types/auth"
 import { create } from "zustand"
-import { persist, createJSONStorage } from "zustand/middleware" // 1. Import add karyu
+import { persist } from "zustand/middleware"
+
+import type { User } from "@/types/auth"
+import { api } from "@/constants/api"
 
 interface AuthState {
   user: User | null
@@ -8,7 +10,8 @@ interface AuthState {
   isLoading: boolean
 
   setUser: (user: User | null) => void
-  logout: () => void
+  checkAuth: () => Promise<void>
+  logout: () => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -16,7 +19,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      isLoading: true, // Default loading true rakhyu chhe
+      isLoading: true,
 
       setUser: (user) =>
         set({
@@ -25,20 +28,38 @@ export const useAuthStore = create<AuthState>()(
           isLoading: false,
         }),
 
-      logout: () =>
+      checkAuth: async () => {
+        try {
+          const res = await api.get("/me")
+
+          set({
+            user: res.data.data.user,
+            isAuthenticated: true,
+            isLoading: false,
+          })
+        } catch {
+          set({
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+          })
+        }
+      },
+
+      logout: async () => {
+        await api.post("/logout")
+
         set({
           user: null,
           isAuthenticated: false,
-          isLoading: false,
-        }),
+        })
+      },
     }),
     {
-      name: "auth-storage", // 2. LocalStorage ma aa key thi save thase
-      
-      // 3. Smart Move: Sirf User ane Auth status j save kar, loading nai.
-      partialize: (state) => ({ 
-        user: state.user, 
-        isAuthenticated: state.isAuthenticated 
+      name: "auth-storage",
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
       }),
     }
   )

@@ -3,6 +3,7 @@ export type User = {
   email: string
   userName: string
   phone: Number
+  avatar?: string
   isAdmin: boolean
   isCordinator: boolean
   coordinatorType: "student" | "institute" | "department" | "event" | null

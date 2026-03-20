@@ -21,13 +21,6 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 
 import {
   MoreHorizontal,
@@ -48,10 +41,10 @@ import type { User } from "@/types/auth";
 
 // ── Coordinator type config ───────────────────────────────────
 const COORDINATOR_TYPES = [
-  { value: "student", label: "Student Coordinator", Icon: UserRound, color: "text-violet-600", bg: "focus:bg-violet-50" },
-  { value: "institute", label: "Institute Coordinator", Icon: Building2, color: "text-[#1E3A8A]", bg: "focus:bg-blue-50" },
-  { value: "department", label: "Department Coordinator", Icon: School, color: "text-sky-700", bg: "focus:bg-sky-50" },
-  { value: "event", label: "Event Coordinator", Icon: CalendarDays, color: "text-indigo-600", bg: "focus:bg-indigo-50" },
+  { value: "student", label: "Student Coordinator", Icon: UserRound, color: "text-violet-400", bg: "focus:bg-violet-500/10" },
+  { value: "institute", label: "Institute Coordinator", Icon: Building2, color: "text-blue-400", bg: "focus:bg-blue-500/10" },
+  { value: "department", label: "Department Coordinator", Icon: School, color: "text-sky-400", bg: "focus:bg-sky-500/10" },
+  { value: "event", label: "Event Coordinator", Icon: CalendarDays, color: "text-indigo-400", bg: "focus:bg-indigo-500/10" },
 ] as const;
 
 type CoordinatorTypeValue = typeof COORDINATOR_TYPES[number]["value"];
@@ -69,11 +62,11 @@ function getInitials(name: string) {
 }
 
 const avatarColors = [
-  "bg-blue-100 text-blue-700",
-  "bg-indigo-100 text-indigo-700",
-  "bg-sky-100 text-sky-700",
-  "bg-violet-100 text-violet-700",
-  "bg-teal-100 text-teal-700",
+  "bg-blue-500/15 text-blue-400",
+  "bg-indigo-500/15 text-indigo-400",
+  "bg-sky-500/15 text-sky-400",
+  "bg-violet-500/15 text-violet-400",
+  "bg-teal-500/15 text-teal-400",
 ];
 function getAvatarColor(name: string) {
   return avatarColors[name.charCodeAt(0) % avatarColors.length];
@@ -124,57 +117,52 @@ export default function UsersTable() {
   const studentCount = nonAdminUsers.filter((u) => !u.isCordinator).length;
 
   return (
-    <Card className="border-[#E2E8F0] shadow-sm bg-white overflow-hidden">
-      <div className="h-1 w-full bg-gradient-to-r from-[#1E3A8A] via-[#4F46E5] to-[#0EA5E9]" />
+    <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
 
-      <CardHeader className="pb-4 bg-white">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#4F46E5] shadow-sm">
-              <Users className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <CardTitle className="text-lg font-bold text-[#0F172A]">Users</CardTitle>
-              <CardDescription className="text-sm text-slate-500">
-                Manage participants &amp; coordinators — click ⋯ to change role
-              </CardDescription>
-            </div>
+      <div className="flex items-center justify-between gap-4 flex-wrap px-6 py-5 border-b border-border/60">
+        <div className="flex items-center gap-3.5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-foreground/[0.05] border border-border/60">
+            <Users className="h-5 w-5 text-foreground/70" />
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="outline" className="text-xs font-semibold border-blue-200 text-[#1E3A8A] bg-blue-50 gap-1">
-              <GraduationCap className="h-3 w-3" />
-              {isLoading ? "…" : `${studentCount} Students`}
-            </Badge>
-            <Badge variant="outline" className="text-xs font-semibold border-emerald-200 text-emerald-700 bg-emerald-50 gap-1">
-              <ShieldCheck className="h-3 w-3" />
-              {isLoading ? "…" : `${coordinatorCount} Coordinators`}
-            </Badge>
+          <div>
+            <h2 className="text-base font-bold text-foreground tracking-tight">Users</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Manage participants &amp; coordinators — click ⋯ to change role</p>
           </div>
         </div>
-      </CardHeader>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Badge variant="outline" className="text-xs font-semibold gap-1 rounded-full">
+            <GraduationCap className="h-3 w-3" />
+            {isLoading ? "…" : `${studentCount} Students`}
+          </Badge>
+          <Badge variant="secondary" className="text-xs font-semibold gap-1 rounded-full text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+            <ShieldCheck className="h-3 w-3" />
+            {isLoading ? "…" : `${coordinatorCount} Coordinators`}
+          </Badge>
+        </div>
+      </div>
 
-      <CardContent className="p-0">
+      <div className="p-0">
         {isError && (
-          <div className="mx-6 mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-            <span className="text-sm text-red-600 font-medium">Failed to load users.</span>
+          <div className="mx-6 mb-4 mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
+            <span className="text-sm text-red-400 font-medium">Failed to load users.</span>
           </div>
         )}
 
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent border-[#E2E8F0] bg-[#F8FAFC]">
-              <TableHead className="pl-6 font-semibold text-[#0F172A] text-xs uppercase tracking-wide">User</TableHead>
-              <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Email</TableHead>
-              <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Phone</TableHead>
-              <TableHead className="font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Role</TableHead>
-              <TableHead className="text-right pr-6 font-semibold text-[#0F172A] text-xs uppercase tracking-wide">Actions</TableHead>
+            <TableRow className="hover:bg-transparent border-border/60 bg-muted/40">
+              <TableHead className="pl-6 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">User</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Email</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Phone</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Role</TableHead>
+              <TableHead className="text-right pr-6 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {isLoading
               ? Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i} className="border-[#E2E8F0]">
+                <TableRow key={i} className="border-border/40">
                   <TableCell className="pl-6">
                     <div className="flex items-center gap-3">
                       <Skeleton className="h-8 w-8 rounded-full" />
@@ -184,44 +172,44 @@ export default function UsersTable() {
                   <TableCell><Skeleton className="h-4 w-40" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-28" /></TableCell>
                   <TableCell><Skeleton className="h-5 w-32 rounded-full" /></TableCell>
-                  <TableCell className="text-right pr-6"><Skeleton className="h-8 w-8 ml-auto rounded-md" /></TableCell>
+                  <TableCell className="text-right pr-6"><Skeleton className="h-7 w-7 ml-auto rounded-lg" /></TableCell>
                 </TableRow>
               ))
               : nonAdminUsers.map((user) => {
                 const CoordIcon = user.isCordinator ? coordTypeIcon(user.coordinatorType) : null;
                 return (
-                  <TableRow key={user._id} className="group border-[#E2E8F0] hover:bg-blue-50/50 transition-colors">
+                  <TableRow key={user._id} className="group border-border/40 hover:bg-muted/50 transition-colors">
                     {/* Avatar + Name */}
                     <TableCell className="pl-6">
                       <div className="flex items-center gap-3">
                         <div className="relative">
-                          <Avatar className="h-8 w-8 ring-2 ring-[#E2E8F0]">
+                          <Avatar className="h-8 w-8 ring-1 ring-border">
                             <AvatarFallback className={`text-xs font-bold ${getAvatarColor(user.userName)}`}>
                               {getInitials(user.userName)}
                             </AvatarFallback>
                           </Avatar>
                           {user.isCordinator && (
-                            <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-white">
+                            <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-card">
                               <ShieldCheck className="h-2 w-2 text-white" />
                             </span>
                           )}
                         </div>
-                        <span className="font-semibold text-[#0F172A]">{user.userName}</span>
+                        <span className="font-semibold text-foreground">{user.userName}</span>
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-slate-500 text-sm">{user.email}</TableCell>
-                    <TableCell className="text-slate-500 text-sm font-mono">{String(user.phone)}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{user.email}</TableCell>
+                    <TableCell className="text-muted-foreground text-xs font-mono">{String(user.phone)}</TableCell>
 
                     {/* Role + coordinator type badge */}
                     <TableCell>
                       {user.isCordinator ? (
-                        <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-50 text-xs font-semibold gap-1 select-none">
+                        <Badge variant="secondary" className="text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold gap-1 select-none rounded-full">
                           {CoordIcon && <CoordIcon className="h-3 w-3" />}
                           {coordTypeLabel(user.coordinatorType)}
                         </Badge>
                       ) : (
-                        <Badge className="bg-blue-50 text-[#1E3A8A] border border-blue-200 hover:bg-blue-50 text-xs font-semibold gap-1 select-none">
+                        <Badge variant="outline" className="text-xs font-semibold gap-1 select-none rounded-full">
                           <GraduationCap className="h-3 w-3" />
                           Student
                         </Badge>
@@ -235,17 +223,17 @@ export default function UsersTable() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-100 hover:text-[#1E3A8A]"
+                            className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-all rounded-lg"
                           >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
 
-                        <DropdownMenuContent align="end" className="w-56 border-[#E2E8F0] shadow-lg">
-                          <DropdownMenuLabel className="text-xs text-slate-400 font-normal truncate max-w-[200px]">
+                        <DropdownMenuContent align="end" className="w-56 bg-popover border-border shadow-lg rounded-xl">
+                          <DropdownMenuLabel className="text-xs text-muted-foreground font-normal truncate max-w-[200px]">
                             {user.userName}
                           </DropdownMenuLabel>
-                          <DropdownMenuSeparator className="bg-[#E2E8F0]" />
+                          <DropdownMenuSeparator className="bg-border" />
 
                           {/* ── Role section ── */}
                           {user.isCordinator ? (
@@ -254,26 +242,26 @@ export default function UsersTable() {
                               <DropdownMenuSub>
                                 <DropdownMenuSubTrigger
                                   disabled={roleLoadingId === user._id || isRolePending}
-                                  className="gap-2 cursor-pointer text-sm"
+                                  className="gap-2 cursor-pointer text-sm text-foreground/70 hover:text-foreground hover:bg-accent rounded-lg"
                                 >
                                   <ShieldCheck className="h-4 w-4 text-emerald-500" />
                                   Change Coordinator Type
                                 </DropdownMenuSubTrigger>
-                                <DropdownMenuSubContent className="w-52 border-[#E2E8F0] shadow-lg">
-                                  <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-slate-400 font-normal">
+                                <DropdownMenuSubContent className="w-52 bg-popover border-border shadow-lg rounded-xl">
+                                  <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
                                     Select type
                                   </DropdownMenuLabel>
-                                  <DropdownMenuSeparator className="bg-[#E2E8F0]" />
-                                  {COORDINATOR_TYPES.map(({ value, label, Icon, color, bg }) => (
+                                  <DropdownMenuSeparator className="bg-border" />
+                                  {COORDINATOR_TYPES.map(({ value, label, Icon }) => (
                                     <DropdownMenuItem
                                       key={value}
                                       onClick={() => handleSetCoordinator(user, value)}
-                                      className={`gap-2 cursor-pointer text-sm ${color} ${bg} ${user.coordinatorType === value ? "font-semibold" : ""}`}
+                                      className={`gap-2 cursor-pointer text-sm rounded-lg text-foreground hover:bg-muted ${user.coordinatorType === value ? "font-semibold" : ""}`}
                                     >
                                       <Icon className="h-4 w-4 shrink-0" />
                                       {label}
                                       {user.coordinatorType === value && (
-                                        <span className="ml-auto text-[10px] bg-current/10 px-1.5 py-0.5 rounded text-current">current</span>
+                                        <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-foreground/10 text-foreground/70">current</span>
                                       )}
                                     </DropdownMenuItem>
                                   ))}
@@ -284,9 +272,9 @@ export default function UsersTable() {
                               <DropdownMenuItem
                                 disabled={roleLoadingId === user._id || isRolePending}
                                 onClick={() => handleUnsetCoordinator(user)}
-                                className="gap-2 cursor-pointer text-amber-700 focus:text-amber-700 focus:bg-amber-50 text-sm"
+                                className="gap-2 cursor-pointer text-amber-600 dark:text-amber-500 focus:text-amber-600 dark:focus:text-amber-400 focus:bg-amber-500/10 rounded-lg text-sm"
                               >
-                                <ShieldOff className="h-4 w-4 text-amber-500 shrink-0" />
+                                <ShieldOff className="h-4 w-4 shrink-0" />
                                 {roleLoadingId === user._id ? "Updating…" : "Unset Coordinator"}
                               </DropdownMenuItem>
                             </>
@@ -295,21 +283,21 @@ export default function UsersTable() {
                             <DropdownMenuSub>
                               <DropdownMenuSubTrigger
                                 disabled={roleLoadingId === user._id || isRolePending}
-                                className="gap-2 cursor-pointer text-sm text-emerald-700 focus:text-emerald-700 focus:bg-emerald-50"
+                                className="gap-2 cursor-pointer text-sm text-emerald-600 dark:text-emerald-500 focus:text-emerald-700 dark:focus:text-emerald-400 focus:bg-emerald-500/10 rounded-lg"
                               >
-                                <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                                <ShieldCheck className="h-4 w-4" />
                                 {roleLoadingId === user._id ? "Updating…" : "Set as Coordinator"}
                               </DropdownMenuSubTrigger>
-                              <DropdownMenuSubContent className="w-52 border-[#E2E8F0] shadow-lg">
-                                <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-slate-400 font-normal">
+                              <DropdownMenuSubContent className="w-52 bg-popover border-border shadow-lg rounded-xl">
+                                <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
                                   Coordinator type
                                 </DropdownMenuLabel>
-                                <DropdownMenuSeparator className="bg-[#E2E8F0]" />
-                                {COORDINATOR_TYPES.map(({ value, label, Icon, color, bg }) => (
+                                <DropdownMenuSeparator className="bg-border" />
+                                {COORDINATOR_TYPES.map(({ value, label, Icon }) => (
                                   <DropdownMenuItem
                                     key={value}
                                     onClick={() => handleSetCoordinator(user, value)}
-                                    className={`gap-2 cursor-pointer text-sm ${color} ${bg}`}
+                                    className={`gap-2 cursor-pointer text-sm rounded-lg text-foreground hover:bg-muted`}
                                   >
                                     <Icon className="h-4 w-4 shrink-0" />
                                     {label}
@@ -319,11 +307,11 @@ export default function UsersTable() {
                             </DropdownMenuSub>
                           )}
 
-                          <DropdownMenuSeparator className="bg-[#E2E8F0]" />
+                          <DropdownMenuSeparator className="bg-border" />
 
                           {/* Delete */}
                           <DropdownMenuItem
-                            className="text-destructive focus:text-destructive cursor-pointer focus:bg-red-50 gap-2 text-sm"
+                            className="text-destructive focus:text-destructive cursor-pointer focus:bg-destructive/10 gap-2 text-sm rounded-lg"
                             disabled={deleteLoadingId === user._id}
                             onClick={() => deleteUser(user._id)}
                           >
@@ -337,7 +325,7 @@ export default function UsersTable() {
               })}
           </TableBody>
         </Table>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

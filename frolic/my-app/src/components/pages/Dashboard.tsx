@@ -1,103 +1,137 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, PlayCircle, ChevronDown } from "lucide-react";
+import { ArrowRight, Sparkles, PlayCircle } from "lucide-react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/helpers/useAuth";
 import EventImageGrid from "../EventImageGrid";
 import RulesSection from "../RulesSection";
 import FaqSection from "../FaqSection";
 import SocialMediaDock from "../SocialMedia";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect } from "react";
 
 export default function StudentWelcome() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
+  const checkAuth = useAuthStore((s) => s.checkAuth);
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   return (
-    <div className="relative min-h-screen w-full bg-transparent text-white font-sans selection:bg-indigo-500/30">
+    <div className="relative min-h-screen w-full bg-background text-foreground font-sans selection:bg-foreground/10 overflow-hidden">
 
       {/* --- HERO SECTION --- */}
-      <section id="hero" className="relative min-h-screen w-full overflow-hidden bg-[#04070f]">
+      <section id="hero" className="relative min-h-screen w-full flex flex-col items-center pt-32 pb-16">
 
-        {/* Ambient glows */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute top-[-15%] left-[10%] h-[45rem] w-[45rem] rounded-full bg-[#1E3A8A]/25 blur-[160px]" />
-          <div className="absolute top-[-10%] right-[5%] h-[35rem] w-[35rem] rounded-full bg-[#4F46E5]/20 blur-[140px]" />
-          <div className="absolute bottom-[-5%] left-[35%] h-[30rem] w-[30rem] rounded-full bg-[#0EA5E9]/15 blur-[120px]" />
+        {/* Subtle top badge */}
+        <div className="animate-in fade-in zoom-in duration-700 slide-in-from-bottom-4 mb-6">
+          <Badge
+            variant="outline"
+            className="px-4 py-1.5 rounded-full border-border/40 bg-foreground/[0.02] text-foreground/50 tracking-widest text-[10px] uppercase font-semibold backdrop-blur-md transition-colors hover:bg-foreground/[0.04]"
+          >
+            <Sparkles className="w-3 h-3 mr-2 opacity-50" />
+            Darshan University Presents
+          </Badge>
         </div>
 
-        {/* Subtle grid pattern */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }}
-        />
-
-        {/* HERO CONTENT */}
-        <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center pt-20">
-
-          <div className="animate-in fade-in zoom-in duration-700 slide-in-from-bottom-4">
-            <Badge
-              variant="outline"
-              className="mb-6 px-4 py-1.5 rounded-full border-sky-500/30 bg-sky-500/10 text-sky-200 backdrop-blur-md uppercase tracking-widest text-xs font-semibold shadow-[0_0_15px_-3px_rgba(14,165,233,0.4)]"
-            >
-              <Sparkles className="w-3 h-3 mr-2 text-sky-400" />
-              Darshan University Presents
-            </Badge>
-          </div>
-
-          <h1 className="max-w-5xl mx-auto text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white drop-shadow-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            FROLIC
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-[#4F46E5]">
-              2026
-            </span>
+        {/* Apple-style typography */}
+        <div className="flex flex-col items-center text-center px-4 z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <h1 className="text-6xl md:text-7xl lg:text-[5.5rem] font-semibold tracking-tight text-foreground leading-[1.1]">
+            Frolic 2026
           </h1>
-
-          <p className="mt-8 max-w-2xl text-lg md:text-xl text-zinc-300 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-200">
-            The ultimate cultural phenomenon. Compete, celebrate, and create memories
-            in a symphony of <span className="text-sky-400 font-semibold">music</span>,{" "}
-            <span className="text-indigo-400 font-semibold">art</span>, and{" "}
-            <span className="text-blue-400 font-semibold">passion</span>.
+          <p className="mt-4 text-xl md:text-2xl font-medium text-foreground/70 tracking-tight max-w-2xl">
+            The extraordinary cultural phenomenon.
+            <br className="hidden md:block" />
+            <span className="text-foreground/45">Experience the ultimate fest.</span>
           </p>
+        </div>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300">
-            {!isAuthenticated && (
-              <Button
-                size="lg"
-                onClick={() => navigate("/login")}
-                className="group relative h-12 rounded-full bg-gradient-to-r from-[#1E3A8A] to-[#4F46E5] hover:from-[#1e40af] hover:to-[#4338ca] px-8 text-base font-semibold text-white shadow-[0_0_40px_-10px_rgba(30,58,138,0.7)] hover:shadow-[0_0_60px_-10px_rgba(30,58,138,0.9)] hover:scale-105 transition-all duration-300 border-none"
-              >
-                Enter as Student
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            )}
-
+        {/* Apple-style action buttons */}
+        <div className="mt-8 mb-16 flex flex-row items-center gap-4 z-10 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-150">
+          {!isAuthenticated && (
             <Button
-              variant="outline"
-              size="lg"
-              onClick={() => navigate("/events")}
-              className="h-12 rounded-full border-white/15 bg-white/5 backdrop-blur-md px-8 text-base font-medium text-white hover:bg-white/10 hover:border-sky-500/40 hover:text-sky-300 transition-all duration-300"
+              onClick={() => navigate("/login")}
+              className="rounded-full bg-[#0071e3] hover:bg-[#0077ED] text-white px-6 h-10 text-[15px] font-medium transition-all"
             >
-              <PlayCircle className="mr-2 h-4 w-4 text-sky-400" />
-              Explore Events
+              Enter as Student
             </Button>
-          </div>
+          )}
 
-          {/* Scroll cue */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-40 animate-bounce">
-            <span className="text-xs text-white/60 tracking-widest uppercase">Scroll</span>
-            <ChevronDown className="h-4 w-4 text-white/60" />
+          <Button
+            variant="outline"
+            onClick={() => navigate("/events")}
+            className="rounded-full border-[#0071e3] text-[#0071e3] hover:bg-[#0071e3]/10 bg-transparent px-6 h-10 text-[15px] font-medium transition-all"
+          >
+            Explore Events
+            <ArrowRight className="ml-1.5 h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* MEANINGFUL CENTERPIECE (Event Bento Grid) */}
+        <div className="relative w-full max-w-6xl px-4 flex-1 flex flex-col justify-end items-center animate-in fade-in slide-in-from-bottom-24 duration-1200 delay-300">
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mt-12 mb-8">
+
+            {/* Box 1: Music & Arts */}
+            <div className="relative  aspect-square md:aspect-auto md:h-100 rounded-[2.5rem] bg-card overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)] border border-border/40 -translate-y-8">
+              <img
+                src="/image4.png"
+                alt="Music & Arts"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/40 to-purple-500/0 opacity-60 transition-opacity group-hover:opacity-100" />
+              <div className="absolute inset-0 flex flex-col justify-end p-8 z-10">
+                <h3 className="text-2xl font-bold tracking-tight text-white mb-2">Music & Arts</h3>
+                <p className="text-white/90 text-sm font-medium drop-shadow-sm">Immerse in unparalleled melodies and creative showcases.</p>
+              </div>
+            </div>
+
+            {/* Box 2: Tech & Innovation (Center - Largest) */}
+            <div className="relative aspect-square md:aspect-auto md:h-90 col-span-1 md:col-span-1 border border-border/40 rounded-[2.5rem] bg-card overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)] translate-y-0 md:-translate-y-3">
+              <img
+                src="/finger-pointing-bulb-draw_1134-183.avif"
+                alt="Innovation"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 opacity-60 transition-opacity group-hover:opacity-100" />
+              <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 z-10">
+                {/* <div className="w-16 h-16 rounded-3xl bg-white/10 backdrop-blur-md flex items-center justify-center mb-4 border border-white/20">
+                  <Sparkles className="w-8 h-8 text-sky-400" />
+                </div> */}
+                <h3 className="text-3xl font-bold tracking-tight text-white mb-2">Innovation</h3>
+                <p className="text-white/90 text-sm font-medium px-4 drop-shadow-sm">50+ cutting edge tech competitions & hackathons.</p>
+              </div>
+            </div>
+
+            {/* Box 3: Sports & E-Sports */}
+            <div className="relative aspect-square md:aspect-auto md:h-80 md:w-100 rounded-[2.5rem] bg-card overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)] border border-border/40">
+              <img
+                src="/image2.png"
+                alt="Sports & Gaming"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-bl from-amber-500/40 to-orange-500/0 opacity-60 transition-opacity group-hover:opacity-100" />
+              <div className="absolute inset-0 flex flex-col justify-end p-8 text-right z-10">
+                <h3 className="text-2xl font-bold tracking-tight text-white mb-2">Sports & Gaming</h3>
+                <p className="text-white/90 text-sm font-medium drop-shadow-sm">Compete in high-stakes physical and digital tournaments.</p>
+              </div>
+            </div>
+
           </div>
         </div>
+
       </section>
 
-      <div className="relative z-20">
+      {/* REMAINDER OF THE PAGE */}
+      <div className="relative z-20 bg-background">
         <Outlet />
+        <SocialMediaDock />
+        <EventImageGrid />
+        <RulesSection />
+        <FaqSection />
       </div>
 
-      <SocialMediaDock />
-      <EventImageGrid />
-      <RulesSection />
-      <FaqSection />
     </div>
   );
 }
