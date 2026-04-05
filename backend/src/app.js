@@ -3,6 +3,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import adminRouter from "./routers/admin.route.js"
 const app = express()
+app.set("trust proxy", 1);
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN,

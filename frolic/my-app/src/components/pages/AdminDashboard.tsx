@@ -3,10 +3,12 @@ import { AppSidebar } from "../app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { Separator } from "../ui/separator";
 import { ShieldCheck, GraduationCap } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useTheme } from "@/hooks/useTheme";
 import { Moon, Sun } from "lucide-react";
 
 export default function EventsDashboard() {
+  const { user } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
 
@@ -31,11 +33,30 @@ export default function EventsDashboard() {
             </div>
           </div>
 
-          <div className="ml-auto flex items-center gap-3">
-            <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 transition-colors ${isDark ? "border-indigo-500/20 bg-indigo-500/10 hover:bg-indigo-500/15" : "border-black/10 bg-black/[0.04] hover:bg-black/[0.06]"}`}>
-              <GraduationCap className={`h-3.5 w-3.5 ${isDark ? "text-indigo-400" : "text-black/60"}`} />
-              <span className={`text-xs font-semibold ${isDark ? "text-indigo-300" : "text-black/70"}`}>Darshan University</span>
+          <div className="ml-auto flex items-center gap-4">
+            <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 transition-colors ${isDark ? "border-indigo-500/20 bg-indigo-500/10" : "border-black/5 bg-black/[0.02]"}`}>
+              <GraduationCap className={`h-3.5 w-3.5 ${isDark ? "text-indigo-400" : "text-black/40"}`} />
+              <span className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? "text-indigo-300/70" : "text-black/50"}`}>Darshan University</span>
             </div>
+
+            <Separator orientation="vertical" className="h-4 bg-border/40" />
+
+            {/* User Profile */}
+            <div className="flex items-center gap-2.5 px-1">
+              <div className="flex flex-col items-end leading-none">
+                <span className="text-sm font-bold text-foreground">
+                  {user?.userName || "Admin"}
+                </span>
+                <span className="text-[10px] text-muted-foreground mt-0.5">
+                  {user?.email || "System Administrator"}
+                </span>
+              </div>
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 border border-white/20 shadow-sm flex items-center justify-center text-[10px] font-bold text-white uppercase">
+                {user?.userName?.charAt(0) || "A"}
+              </div>
+            </div>
+
+            <Separator orientation="vertical" className="h-4 bg-border/40" />
 
             {/* Theme toggle */}
             <button

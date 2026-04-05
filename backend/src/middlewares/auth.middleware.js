@@ -8,14 +8,13 @@ export const VerifyJWT = asyncHandler(async (req, res, next) => {
 
         const token = req.cookies?.accessToken
 
-        // console.log(token);
-        console.log("req.authState " + req.authState);
-        console.log("token " + token);
-
         if (!token) {
+            console.log("Authentication Failed: No accessToken found in cookies.");
             req.authState = "NO_TOKEN";
             return next();
         }
+
+        console.log("Authentication Attempt: Token found, verifying...");
         // console.log('decoding token');
 
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)

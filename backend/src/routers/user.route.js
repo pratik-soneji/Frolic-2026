@@ -13,11 +13,11 @@ const router = Router()
 
 router.route("/register").post(userExists, registerUser)
 router.route("/login").post(VerifyJWT, blockIfAuthenticated, loginUser)
-router.route("/me").get(VerifyJWT, requireAuth, getCurrentUser)
+router.route("/me").get(VerifyJWT, refreshIfExpired, requireAuth, getCurrentUser)
 router.route("/logout").post(VerifyJWT, logoutUser)
 router.route("/refresh").post(refreshAccessToken)
-router.route("/updateUser").patch(VerifyJWT, requireAuth, updateUser);
-router.route("/avatar").post(VerifyJWT, requireAuth, upload.single("avatar"), uploadAvatar);
+router.route("/updateUser").patch(VerifyJWT, refreshIfExpired, requireAuth, updateUser);
+router.route("/avatar").post(VerifyJWT, refreshIfExpired, requireAuth, upload.single("avatar"), uploadAvatar);
 
 
 export default router;  

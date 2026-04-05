@@ -20,10 +20,13 @@ import ParticipantsTable from "./components/ParticipantsTable";
 import EventDetailsUser from "./components/pages/EventDetailsUser";
 import AdminDashboardOverview from "./components/pages/AdminDashboardOverview";
 import WinnersTable from "./components/WinnersTable";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { useAuthStore } from "./store/useAuthStore";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-// Apply saved theme before first render to avoid flash
+// Apply saved theme
 ;(() => {
   const stored = localStorage.getItem("frolic-theme")
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -32,32 +35,47 @@ const queryClient = new QueryClient();
   else document.documentElement.classList.remove("dark")
 })()
 
+const AuthInit = ({ children }: { children: React.ReactNode }) => {
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+  
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+  
+  return <>{children}</>;
+};
+
 ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 ).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Dashboard />}>
-            <Route path="" element={<Navbar />} />
-          </Route>
-          <Route path="/events/:eventId" element={<div className="min-h-screen bg-background"><Navbar /><EventDetailsUser /></div>} />
-          
-          <Route path="/admin" element={<AdminDashboard />}>
-            <Route path="" element={<AdminDashboardOverview />} />
-            <Route path="users" element={<UsersTable />} />
-            <Route path="events" element={<EventsTable />} />
-            <Route path="events/:eventId" element={<EventPreviewPage />} />
-            <Route path="institutes" element={<InstituteTable />} />
-            <Route path="departments" element={<DepartmentTable />} />
-            <Route path="participants" element={<ParticipantsTable />} />
-            <Route path="winners" element={<WinnersTable />} />
-          </Route>
-          <Route path="/signup" element={<RegisterPage />} />
-          <Route path="/task" element={<FindItLanding />} />
-        </Routes>
+        <AuthInit>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Dashboard />}>
+              <Route path="" element={<Navbar />} />
+            </Route>
+            <Route path="/events/:eventId" element={<div className="min-h-screen bg-background"><Navbar /><EventDetailsUser /></div>} />
+            
+            <Route path="/admin" element={<ProtectedRoute />}>
+              <Route element={<AdminDashboard />}>
+                <Route path="" element={<AdminDashboardOverview />} />
+                <Route path="users" element={<UsersTable />} />
+                <Route path="events" element={<EventsTable />} />
+                <Route path="events/:eventId" element={<EventPreviewPage />} />
+                <Route path="institutes" element={<InstituteTable />} />
+                <Route path="departments" element={<DepartmentTable />} />
+                <Route path="participants" element={<ParticipantsTable />} />
+                <Route path="winners" element={<WinnersTable />} />
+              </Route>
+            </Route>
+            
+            <Route path="/signup" element={<RegisterPage />} />
+            <Route path="/task" element={<FindItLanding />} />
+          </Routes>
+        </AuthInit>
         <Toaster />
       </BrowserRouter>
     </QueryClientProvider>
