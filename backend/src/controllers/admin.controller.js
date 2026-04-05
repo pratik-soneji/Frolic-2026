@@ -309,33 +309,46 @@ const getEventParticipants = asyncHandler(async (req, res) => {
 });
 
 const getDashboardStats = asyncHandler(async (req, res) => {
-    const totalEvents = await Events.countDocuments();
-    const totalParticipants = await Participants.countDocuments();
-    const totalInstitutes = await Institutes.countDocuments();
-    const totalWinnersDeclared = await EventWiseWinners.distinct("eventId").then(res => res.length);
-    
-    const last7Days = new Date();
-    last7Days.setDate(last7Days.getDate() - 7);
-    
-    // Safety check fallback
-    const recentActivity = await Participants.aggregate([
-        { $match: { createdAt: { $gte: last7Days } } },
-        { 
-            $group: { 
-                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, 
-                count: { $sum: 1 } 
-            } 
-        },
-        { $sort: { _id: 1 } }
-    ]) || [];
-    
-    return res.status(200).json(new ApiResponse(200, {
-        totalEvents,
-        totalParticipants,
-        totalInstitutes,
-        totalWinnersDeclared,
-        recentActivity
-    }, "Stats fetched successfully"));
+    try {
+        console.log("Dashboard Stats Check: CORS_ORIGIN is: " + process.env.CORS_ORIGIN);
+        
+        const totalEvents = await Events.countDocuments() || 0;
+        const totalParticipants = await Participants.countDocuments() || 0;
+        const totalInstitutes = await Institutes.countDocuments() || 0;
+        const totalWinnersDeclared = (await EventWiseWinners.distinct("eventId") || []).length;
+        
+        const last7Days = new Date();
+        last7Days.setDate(last7Days.getDate() - 7);
+        
+        const recentActivity = await Participants.aggregate([
+            { $match: { createdAt: { $gte: last7Days } } },
+            { 
+                $group: { 
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, 
+                    count: { $sum: 1 } 
+                } 
+            },
+            { $sort: { _id: 1 } }
+        ]) || [];
+        
+        return res.status(200).json(new ApiResponse(200, {
+            totalEvents,
+            totalParticipants,
+            totalInstitutes,
+            totalWinnersDeclared,
+            recentActivity
+        }, "Stats fetched successfully"));
+    } catch (error) {
+        console.error("Dashboard Stats Error: ", error);
+        // Return 200 with zeroed results to prevent frontend crash while debugging backend collections
+        return res.status(200).json(new ApiResponse(200, {
+            totalEvents: 0,
+            totalParticipants: 0,
+            totalInstitutes: 0,
+            totalWinnersDeclared: 0,
+            recentActivity: []
+        }, "Stats failed but returned safe fallback"));
+    }
 });
 
 const getWinners = asyncHandler(async (req, res) => {

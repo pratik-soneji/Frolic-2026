@@ -30,7 +30,7 @@ export default function AdminDashboardOverview() {
     },
   });
 
-  const chartData = stats?.recentActivity.map((item) => ({
+  const chartData = stats?.recentActivity?.map((item) => ({
     date: new Date(item._id).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
     participants: item.count,
   })) || [];
