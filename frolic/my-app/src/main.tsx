@@ -23,11 +23,13 @@ import WinnersTable from "./components/WinnersTable";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
+import axios from "axios";
 
+axios.defaults.withCredentials = true;
 const queryClient = new QueryClient();
 
 // Apply saved theme
-;(() => {
+; (() => {
   const stored = localStorage.getItem("frolic-theme")
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
   const isDark = stored === "dark" || (!stored && prefersDark) || (!stored && true)
@@ -37,11 +39,11 @@ const queryClient = new QueryClient();
 
 const AuthInit = ({ children }: { children: React.ReactNode }) => {
   const checkAuth = useAuthStore((state) => state.checkAuth);
-  
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-  
+
   return <>{children}</>;
 };
 
@@ -58,7 +60,7 @@ ReactDOM.createRoot(
               <Route path="" element={<Navbar />} />
             </Route>
             <Route path="/events/:eventId" element={<div className="min-h-screen bg-background"><Navbar /><EventDetailsUser /></div>} />
-            
+
             <Route path="/admin" element={<ProtectedRoute />}>
               <Route element={<AdminDashboard />}>
                 <Route path="" element={<AdminDashboardOverview />} />
@@ -71,7 +73,7 @@ ReactDOM.createRoot(
                 <Route path="winners" element={<WinnersTable />} />
               </Route>
             </Route>
-            
+
             <Route path="/signup" element={<RegisterPage />} />
             <Route path="/task" element={<FindItLanding />} />
           </Routes>
