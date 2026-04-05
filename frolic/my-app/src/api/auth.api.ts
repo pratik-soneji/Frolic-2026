@@ -4,11 +4,11 @@ import { api } from "@/constants/api"
 import type { LoginResponse } from "@/types/auth"
 
 export const login = async (data: loginFormProps): Promise<LoginResponse> => {
-  const res = await api.post('/login', data)
+  const res = await api.post('/login', data, { withCredentials: true })
   return res.data.data
 }
 export const signup = async (data: signupFormProps): Promise<LoginResponse> => {
-  const res = await api.post('/register', data)
+  const res = await api.post('/register', data, { withCredentials: true })
   return res.data.data
 }
 
