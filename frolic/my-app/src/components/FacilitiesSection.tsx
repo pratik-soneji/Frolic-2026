@@ -21,10 +21,10 @@ export default function FacilitiesSection() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                     {/* Big Hero Card */}
-                    <Card className="md:col-span-2 row-span-2 overflow-hidden border-border/50 bg-card/60 backdrop-blur-md shadow-lg group relative hover:border-primary/50 transition-colors duration-500">
+                    <Card className="md:col-span-2 row-span-2 overflow-hidden border-border/50 bg-card/90 backdrop-blur-md shadow-lg group relative hover:border-primary/40 transition-all duration-500 gradient-border hover:shadow-xl">
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         <CardContent className="p-8 md:p-12 h-full flex flex-col justify-between relative z-10">
-                            <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20 shadow-inner">
+                            <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20 shadow-inner group-hover:scale-110 transition-transform duration-500">
                                 <CalendarDays className="w-8 h-8" />
                             </div>
                             <div>
@@ -37,15 +37,15 @@ export default function FacilitiesSection() {
                     </Card>
 
                     {/* Small Card 1 */}
-                    <Card className="col-span-1 overflow-hidden border-border/50 bg-card/60 backdrop-blur-md shadow-sm group hover:border-sky-500/50 transition-colors duration-500">
+                    <Card className="col-span-1 overflow-hidden border-border/50 bg-card/90 backdrop-blur-md shadow-sm group hover:border-sky-500/40 transition-all duration-500 gradient-border hover:shadow-lg">
                          <CardContent className="p-8 h-full flex flex-col justify-end relative">
-                            <div className="absolute top-0 right-0 p-6 opacity-10 scale-150 -translate-y-4 translate-x-4">
+                            <div className="absolute top-0 right-0 p-6 opacity-[0.06] scale-150 -translate-y-4 translate-x-4">
                                 <Bus className="w-32 h-32" />
                             </div>
-                            <div className="bg-sky-500/10 w-12 h-12 rounded-xl flex items-center justify-center text-sky-500 mb-6 border border-sky-500/20">
+                            <div className="bg-sky-500/10 w-12 h-12 rounded-xl flex items-center justify-center text-sky-500 mb-6 border border-sky-500/20 group-hover:scale-110 transition-transform duration-500">
                                 <Bus className="w-6 h-6" />
                             </div>
-                            <h3 className="text-xl font-bold mb-2">Campus Transport</h3>
+                            <h3 className="text-xl font-bold mb-2 tracking-tight">Campus Transport</h3>
                             <p className="text-muted-foreground text-sm leading-relaxed">
                                 Seamless university bus facilities available completely free of charge across all major city routes.
                             </p>
@@ -53,15 +53,15 @@ export default function FacilitiesSection() {
                     </Card>
 
                     {/* Small Card 2 */}
-                    <Card className="col-span-1 overflow-hidden border-border/50 bg-card/60 backdrop-blur-md shadow-sm group hover:border-amber-500/50 transition-colors duration-500">
+                    <Card className="col-span-1 overflow-hidden border-border/50 bg-card/90 backdrop-blur-md shadow-sm group hover:border-amber-500/40 transition-all duration-500 gradient-border hover:shadow-lg">
                          <CardContent className="p-8 h-full flex flex-col justify-end relative">
-                             <div className="absolute top-0 right-0 p-6 opacity-10 scale-150 -translate-y-4 translate-x-4">
+                             <div className="absolute top-0 right-0 p-6 opacity-[0.06] scale-150 -translate-y-4 translate-x-4">
                                 <Zap className="w-32 h-32" />
                             </div>
-                            <div className="bg-amber-500/10 w-12 h-12 rounded-xl flex items-center justify-center text-amber-500 mb-6 border border-amber-500/20">
+                            <div className="bg-amber-500/10 w-12 h-12 rounded-xl flex items-center justify-center text-amber-500 mb-6 border border-amber-500/20 group-hover:scale-110 transition-transform duration-500">
                                 <Wifi className="w-6 h-6" />
                             </div>
-                            <h3 className="text-xl font-bold mb-2">High-Speed Wi-Fi</h3>
+                            <h3 className="text-xl font-bold mb-2 tracking-tight">High-Speed Wi-Fi</h3>
                             <p className="text-muted-foreground text-sm leading-relaxed">
                                 5G enabled wireless networks covering the entire festival ground for lightning-fast connectivity.
                             </p>
@@ -69,18 +69,18 @@ export default function FacilitiesSection() {
                     </Card>
 
                     {/* Wide Footer Card */}
-                    <Card className="col-span-1 md:col-span-3 overflow-hidden border-border/50 bg-card/60 backdrop-blur-md shadow-sm group hover:border-emerald-500/50 transition-colors duration-500 flex flex-col md:flex-row items-center gap-6 p-6">
-                         <div className="bg-emerald-500/10 w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center text-emerald-500 border border-emerald-500/20">
+                    <Card className="col-span-1 md:col-span-3 overflow-hidden border-border/50 bg-card/90 backdrop-blur-md shadow-sm group hover:border-emerald-500/40 transition-all duration-500 gradient-border hover:shadow-lg flex flex-col md:flex-row items-center gap-6 p-6">
+                         <div className="bg-emerald-500/10 w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center text-emerald-500 border border-emerald-500/20 group-hover:scale-110 transition-transform duration-500">
                              <Coffee className="w-8 h-8" />
                          </div>
                          <div className="text-center md:text-left flex-1">
-                             <h3 className="text-xl font-bold mb-1">24/7 Food Courts & Medical Staff</h3>
+                             <h3 className="text-xl font-bold mb-1 tracking-tight">24/7 Food Courts & Medical Staff</h3>
                              <p className="text-muted-foreground text-sm">
                                 Premium catering stalls, resting zones, and a dedicated emergency medical response team on standby.
                              </p>
                          </div>
                          <div className="shrink-0 hidden md:block">
-                             <TicketCheck className="w-24 h-24 text-foreground/5" />
+                             <TicketCheck className="w-24 h-24 text-foreground/[0.03]" />
                          </div>
                     </Card>
                 </div>

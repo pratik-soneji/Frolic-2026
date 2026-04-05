@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useForm } from "react-hook-form"
 import { useLogin } from "@/api/auth.queries"
 import { NavLink } from "react-router-dom"
-import { GraduationCap, ArrowRight, Activity, Cpu, Box, Trophy } from "lucide-react"
+import { GraduationCap, Activity, Cpu, Trophy } from "lucide-react"
 
 export interface loginFormProps {
   email: string
@@ -107,7 +107,7 @@ export default function Login() {
                 {...register("email", { required: "Email is required" })}
                 placeholder="you@example.com"
                 type="text"
-                className="h-12 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all text-base px-4"
+                className="h-12 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl shadow-sm transition-all text-base px-4"
               />
               {errors.email && (
                 <p className="text-xs text-red-500 pl-1">{String(errors.email.message)}</p>
@@ -124,7 +124,7 @@ export default function Login() {
                 type="password"
                 {...register("password", { required: "Password is required" })}
                 placeholder="••••••••"
-                className="h-12 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all text-base px-4 font-mono tracking-widest"
+                className="h-12 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl shadow-sm transition-all text-base px-4 font-mono tracking-widest"
               />
               {errors.password && (
                 <p className="text-xs text-red-500 pl-1">{String(errors.password.message)}</p>
@@ -159,7 +159,7 @@ export default function Login() {
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full h-12 mt-4 font-semibold bg-foreground hover:bg-foreground/90 text-background shadow-md transition-all rounded-xl text-base flex justify-center items-center gap-2 group"
+              className="w-full h-12 mt-4 font-semibold bg-foreground hover:bg-foreground/90 text-background shadow-lg hover:shadow-xl transition-all rounded-xl text-base flex justify-center items-center gap-2 group hover:scale-[1.01]"
             >
               {isPending ? "Authenticating…" : "Continue"}
             </Button>

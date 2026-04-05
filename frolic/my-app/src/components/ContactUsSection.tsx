@@ -21,7 +21,7 @@ export default function ContactUsSection() {
                     {/* Left Column: Contact Details */}
                     <div className="space-y-8">
                         <div className="flex items-start gap-4">
-                            <div className="bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center text-primary shrink-0 border border-primary/20">
+                            <div className="bg-rose-500/10 w-12 h-12 rounded-xl flex items-center justify-center text-rose-500 shrink-0 border border-rose-500/20">
                                 <MapPin className="w-5 h-5" />
                             </div>
                             <div>
@@ -35,7 +35,7 @@ export default function ContactUsSection() {
                         </div>
 
                         <div className="flex items-start gap-4">
-                            <div className="bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center text-primary shrink-0 border border-primary/20">
+                            <div className="bg-sky-500/10 w-12 h-12 rounded-xl flex items-center justify-center text-sky-500 shrink-0 border border-sky-500/20">
                                 <Phone className="w-5 h-5" />
                             </div>
                             <div>
@@ -48,7 +48,7 @@ export default function ContactUsSection() {
                         </div>
 
                         <div className="flex items-start gap-4">
-                            <div className="bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center text-primary shrink-0 border border-primary/20">
+                            <div className="bg-violet-500/10 w-12 h-12 rounded-xl flex items-center justify-center text-violet-500 shrink-0 border border-violet-500/20">
                                 <Mail className="w-5 h-5" />
                             </div>
                             <div>
@@ -62,29 +62,29 @@ export default function ContactUsSection() {
                     </div>
 
                     {/* Right Column: Contact Form */}
-                    <Card className="border-border/50 bg-card shadow-xl overflow-hidden relative">
+                    <Card className="border-border/50 bg-card backdrop-blur-xl shadow-xl overflow-hidden relative">
                         <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary via-indigo-400 to-sky-400" />
                         <CardContent className="p-8">
                             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <label htmlFor="first-name" className="text-sm font-semibold">First Name</label>
-                                        <Input id="first-name" placeholder="John" className="bg-muted/50 focus-visible:ring-primary/50" />
+                                        <Input id="first-name" placeholder="John" className="bg-muted/30 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl transition-all" />
                                     </div>
                                     <div className="space-y-2">
                                         <label htmlFor="last-name" className="text-sm font-semibold">Last Name</label>
-                                        <Input id="last-name" placeholder="Doe" className="bg-muted/50 focus-visible:ring-primary/50" />
+                                        <Input id="last-name" placeholder="Doe" className="bg-muted/30 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl transition-all" />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label htmlFor="email" className="text-sm font-semibold">Email Address</label>
-                                    <Input id="email" type="email" placeholder="john@example.com" className="bg-muted/50 focus-visible:ring-primary/50" />
+                                    <Input id="email" type="email" placeholder="john@example.com" className="bg-muted/30 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl transition-all" />
                                 </div>
                                 <div className="space-y-2">
                                     <label htmlFor="message" className="text-sm font-semibold">Message</label>
                                     <Textarea id="message" placeholder="How can we help you?" className="min-h-[120px] bg-muted/50 focus-visible:ring-primary/50 resize-none" />
                                 </div>
-                                <Button type="submit" className="w-full h-11 text-base font-semibold group mt-2 bg-primary hover:bg-primary/90 text-primary-foreground">
+                                <Button type="submit" className="w-full h-11 text-base font-semibold group mt-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all">
                                     Send Message
                                     <Mail className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                                 </Button>

@@ -64,55 +64,68 @@ export default function AdminDashboardOverview() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-border/60 shadow-sm bg-card">
+        <Card className="relative overflow-hidden border-border/60 shadow-sm bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-indigo-500 via-indigo-400 to-indigo-500/0" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Events</CardTitle>
-            <CalendarDays className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Events</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-500 group-hover:bg-indigo-500/15 group-hover:scale-110 transition-all duration-300">
+              <CalendarDays className="h-4 w-4" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalEvents}</div>
-            <p className="text-xs text-muted-foreground mt-1">Configured events</p>
+            <div className="text-3xl font-bold tracking-tight">{stats.totalEvents}</div>
+            <p className="text-xs text-muted-foreground mt-1.5">Configured events</p>
           </CardContent>
         </Card>
         
-        <Card className="border-border/60 shadow-sm bg-card">
+        <Card className="relative overflow-hidden border-border/60 shadow-sm bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-sky-500 via-sky-400 to-sky-500/0" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Participants</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Participants</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/10 text-sky-500 group-hover:bg-sky-500/15 group-hover:scale-110 transition-all duration-300">
+              <Users className="h-4 w-4" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalParticipants}</div>
-            <p className="text-xs text-muted-foreground mt-1">Registered individuals</p>
+            <div className="text-3xl font-bold tracking-tight">{stats.totalParticipants}</div>
+            <p className="text-xs text-muted-foreground mt-1.5">Registered individuals</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border/60 shadow-sm bg-card">
+        <Card className="relative overflow-hidden border-border/60 shadow-sm bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-violet-500 via-violet-400 to-violet-500/0" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Institutes</CardTitle>
-            <Building2 className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Institutes</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-500 group-hover:bg-violet-500/15 group-hover:scale-110 transition-all duration-300">
+              <Building2 className="h-4 w-4" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalInstitutes}</div>
-            <p className="text-xs text-muted-foreground mt-1">Participating colleges</p>
+            <div className="text-3xl font-bold tracking-tight">{stats.totalInstitutes}</div>
+            <p className="text-xs text-muted-foreground mt-1.5">Participating colleges</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border/60 shadow-sm bg-card">
+        <Card className="relative overflow-hidden border-border/60 shadow-sm bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500/0" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Results Declared</CardTitle>
-            <Trophy className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Results Declared</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500/15 group-hover:scale-110 transition-all duration-300">
+              <Trophy className="h-4 w-4" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalWinnersDeclared}</div>
-            <p className="text-xs text-muted-foreground mt-1">Events with winners</p>
+            <div className="text-3xl font-bold tracking-tight">{stats.totalWinnersDeclared}</div>
+            <p className="text-xs text-muted-foreground mt-1.5">Events with winners</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 border-border/60 shadow-sm bg-card">
-          <CardHeader>
-            <CardTitle className="text-lg">Recent Registration Activity</CardTitle>
+        <Card className="col-span-4 border-border/60 shadow-sm bg-card hover:shadow-md transition-shadow duration-300">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-semibold">Recent Registration Activity</CardTitle>
+            <p className="text-xs text-muted-foreground">New participant registrations over the last 7 days</p>
           </CardHeader>
           <CardContent className="h-[300px] pt-4">
             {chartData.length > 0 ? (
@@ -166,21 +179,27 @@ export default function AdminDashboardOverview() {
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full w-full flex items-center justify-center border-t border-border/40 bg-muted/10 rounded-xl">
+              <div className="h-full w-full flex items-center justify-center bg-muted/10 rounded-xl">
                 <p className="text-sm text-muted-foreground">No recent registration activity.</p>
               </div>
             )}
           </CardContent>
         </Card>
-        <Card className="col-span-3 border-border/60 shadow-sm bg-card">
-          <CardHeader>
-            <CardTitle className="text-lg">System Status</CardTitle>
+        <Card className="col-span-3 border-border/60 shadow-sm bg-card hover:shadow-md transition-shadow duration-300">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-semibold">System Status</CardTitle>
+            <p className="text-xs text-muted-foreground">Real-time infrastructure health</p>
           </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center h-[300px] border-t border-border/40 bg-muted/10">
-            <div className="flex flex-col items-center gap-3">
-              <div className="h-4 w-4 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-pulse"></div>
-              <p className="text-base font-semibold text-foreground">All systems operational</p>
-              <p className="text-xs text-muted-foreground text-center px-8">Server is syncing correctly and connections are stable.</p>
+          <CardContent className="flex flex-col items-center justify-center h-[300px] bg-muted/5 rounded-b-xl">
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative">
+                <div className="h-5 w-5 rounded-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.5)]"></div>
+                <div className="absolute inset-0 h-5 w-5 rounded-full bg-emerald-500 animate-ping opacity-20"></div>
+              </div>
+              <div className="text-center">
+                <p className="text-base font-semibold text-foreground">All systems operational</p>
+                <p className="text-xs text-muted-foreground mt-1.5 max-w-[200px]">Server is syncing correctly and connections are stable.</p>
+              </div>
             </div>
           </CardContent>
         </Card>

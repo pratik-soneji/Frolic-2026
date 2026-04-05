@@ -65,17 +65,18 @@ const NavItem = ({ item, isActive }: { item: typeof navMain[0], isActive: boolea
       asChild
       tooltip={item.title}
       isActive={isActive}
-      className={`
-        transition-all duration-150 rounded-lg
+      className={`  
+        transition-all duration-200 
+        group-data-[collapsible=icon]:justify-center
         ${isActive
-          ? "bg-foreground/[0.08] text-foreground font-semibold border border-foreground/[0.08]"
-          : "text-foreground/45 hover:text-foreground/80 hover:bg-foreground/[0.05] border border-transparent"
+          ? "bg-sidebar-accent text-sidebar-foreground font-semibold shadow-sm rounded-lg"
+          : "text-sidebar-foreground/50 hover:text-sidebar-foreground/90 hover:bg-sidebar-accent/60 rounded-lg"
         }
       `}
     >
-      <Link to={item.url} className="flex items-center gap-2.5">
-        <item.icon className="h-4 w-4" />
-        <span className="text-sm">{item.title}</span>
+      <Link to={item.url} className="flex items-center gap-3">
+        <item.icon className={`h-4.5 w-4.5 shrink-0 transition-colors ${isActive ? 'text-violet-500 dark:text-violet-400' : ''}`} />
+        <span className="text-sm truncate">{item.title}</span>
       </Link>
     </SidebarMenuButton>
   </SidebarMenuItem>
@@ -88,21 +89,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       collapsible="icon"
-      
+      className="border-r border-sidebar-border/50"
       {...props}
     >
       {/* Header */}
-      <SidebarHeader className="border-b border-sidebar-border pb-3">
+      <SidebarHeader className="border-b border-sidebar-border/50 pb-3 pt-4 px-3">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild className="hover:bg-sidebar-accent/50">
-              <Link to="/admin">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-sm">
-                  <ShieldCheck className="size-4" />
+            <SidebarMenuButton size="lg" asChild className="hover:bg-transparent p-0 active:bg-transparent">
+              <Link to="/admin" className="flex items-center gap-3">
+                <div className="flex shrink-0 aspect-square size-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-sm ring-1 ring-white/10 group-data-[collapsible=icon]:mx-auto">
+                  <ShieldCheck className="size-4.5" />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-bold text-sidebar-foreground">Frolic Admin</span>
-                  <span className="truncate text-xs text-sidebar-foreground/50">Event Manager · 2026</span>
+                <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                  <span className="truncate font-bold tracking-tight text-[15px] text-sidebar-foreground">Frolic Admin</span>
+                  <span className="truncate text-[10px] uppercase tracking-wider font-semibold text-sidebar-foreground/50">Dashboard</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -110,7 +111,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent className="px-2 py-2">
+      <SidebarContent className="py-2 px-1">
         {/* Management Group */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-sidebar-foreground/30 px-2 py-2">
@@ -160,12 +161,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu className="space-y-0.5">
 
           <SidebarMenuItem>
-            <SidebarMenuButton 
+            <SidebarMenuButton
               onClick={() => handleLogout()}
-              className="text-red-500/70 hover:text-red-500 hover:bg-red-500/[0.08] rounded-lg transition-colors font-medium border border-transparent"
+              className="text-sidebar-foreground/50 hover:text-red-500 hover:bg-red-500/[0.08] rounded-xl transition-all duration-200 font-medium border border-transparent hover:border-red-500/10"
             >
               <LogOut className="h-4 w-4" />
-              <span className="text-sm">Logout</span>
+              <span className="text-sm">Sign out</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

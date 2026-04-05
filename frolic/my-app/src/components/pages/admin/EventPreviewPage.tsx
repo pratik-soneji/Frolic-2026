@@ -43,18 +43,19 @@ export default function EventPreviewPage() {
         <ArrowLeft className="w-4 h-4" /> Back to Events
       </Button>
 
-      <div className="bg-card border border-border/60 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-card border border-border/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
         {/* Banner Image */}
         {(event.imageUrl || event.eventImageUrl) ? (
-          <div className="w-full h-[300px] md:h-[400px] relative">
+          <div className="w-full h-[300px] md:h-[400px] relative overflow-hidden">
             <img 
               src={event.imageUrl || event.eventImageUrl} 
               alt={event.eventName} 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.02]"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
           </div>
         ) : (
-          <div className="w-full h-[200px] md:h-[300px] bg-muted/40 flex items-center justify-center">
+          <div className="w-full h-[200px] md:h-[300px] bg-gradient-to-br from-muted/40 to-muted/60 flex items-center justify-center">
             <span className="text-muted-foreground font-medium">No cover image uploaded</span>
           </div>
         )}
@@ -80,7 +81,7 @@ export default function EventPreviewPage() {
             {/* Left Column */}
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                 <div className="p-3 bg-muted rounded-xl"><MapPin className="w-5 h-5 text-primary" /></div>
+                 <div className="p-3 bg-indigo-500/10 rounded-xl"><MapPin className="w-5 h-5 text-indigo-500" /></div>
                  <div>
                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Location</p>
                    <p className="text-foreground font-medium">{event.eventLocation || "TBA"}</p>
@@ -88,7 +89,7 @@ export default function EventPreviewPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                 <div className="p-3 bg-muted rounded-xl"><Users className="w-5 h-5 text-primary" /></div>
+                 <div className="p-3 bg-sky-500/10 rounded-xl"><Users className="w-5 h-5 text-sky-500" /></div>
                  <div>
                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Participation</p>
                    <p className="text-foreground font-medium">
@@ -101,7 +102,7 @@ export default function EventPreviewPage() {
               </div>
               
               <div className="flex items-start gap-4">
-                 <div className="p-3 bg-muted rounded-xl"><DollarSign className="w-5 h-5 text-primary" /></div>
+                 <div className="p-3 bg-emerald-500/10 rounded-xl"><DollarSign className="w-5 h-5 text-emerald-500" /></div>
                  <div>
                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Entry Fee</p>
                    {event.evetFees > 0 ? (
@@ -116,7 +117,7 @@ export default function EventPreviewPage() {
             {/* Right Column */}
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                 <div className="p-3 bg-muted rounded-xl"><Trophy className="w-5 h-5 text-amber-500" /></div>
+                 <div className="p-3 bg-amber-500/10 rounded-xl"><Trophy className="w-5 h-5 text-amber-500" /></div>
                  <div>
                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Prizes</p>
                    <ul className="space-y-2">
@@ -132,7 +133,7 @@ export default function EventPreviewPage() {
 
               {event.eventCoOrdinatorId && (
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-muted rounded-xl"><Users className="w-5 h-5 text-primary" /></div>
+                  <div className="p-3 bg-violet-500/10 rounded-xl"><Users className="w-5 h-5 text-violet-500" /></div>
                   <div>
                     <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Faculty Coordinator</p>
                     <p className="text-foreground font-medium">{event.eventCoOrdinatorId.userName}</p>

@@ -16,9 +16,9 @@ export default function EventsDashboard() {
       <main className="flex-1 w-full relative bg-background min-h-screen">
 
         {/* Header */}
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-border/60 bg-background/80 backdrop-blur-xl px-4">
-          <SidebarTrigger className="text-foreground/40 hover:text-foreground hover:bg-foreground/[0.06] transition-colors rounded-lg" />
-          <Separator orientation="vertical" className="h-5 bg-border/60" />
+        <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-border/50 bg-background/85 backdrop-blur-2xl backdrop-saturate-150 px-6">
+          <SidebarTrigger className="text-foreground/40 hover:text-foreground hover:bg-foreground/[0.06] transition-all duration-200 rounded-lg" />
+          <Separator orientation="vertical" className="h-5 bg-border/50" />
 
           {/* Left — Admin badge */}
           <div className="flex items-center gap-2.5">
@@ -31,8 +31,8 @@ export default function EventsDashboard() {
             </div>
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
-            <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 ${isDark ? "border-indigo-500/20 bg-indigo-500/10" : "border-black/10 bg-black/[0.04]"}`}>
+          <div className="ml-auto flex items-center gap-3">
+            <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 transition-colors ${isDark ? "border-indigo-500/20 bg-indigo-500/10 hover:bg-indigo-500/15" : "border-black/10 bg-black/[0.04] hover:bg-black/[0.06]"}`}>
               <GraduationCap className={`h-3.5 w-3.5 ${isDark ? "text-indigo-400" : "text-black/60"}`} />
               <span className={`text-xs font-semibold ${isDark ? "text-indigo-300" : "text-black/70"}`}>Darshan University</span>
             </div>
@@ -41,15 +41,15 @@ export default function EventsDashboard() {
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-foreground/40 hover:text-foreground hover:bg-foreground/[0.06] transition-all cursor-pointer border-none bg-transparent"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground/40 hover:text-foreground hover:bg-foreground/[0.06] transition-all duration-200 cursor-pointer border-none bg-transparent"
             >
-              {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
           </div>
         </header>
 
         {/* Page Content */}
-        <div className="p-6 relative z-10">
+        <div className="p-6 lg:p-8 relative z-10">
           <Outlet />
         </div>
       </main>

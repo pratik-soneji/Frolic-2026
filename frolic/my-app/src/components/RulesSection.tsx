@@ -60,11 +60,11 @@ export default function RulesSection() {
         </div>
 
         {/* Rules Card */}
-        <Card className="border-border/60 bg-card shadow-sm">
+        <Card className="border-border/60 bg-card shadow-sm hover:shadow-md transition-shadow duration-300">
           <CardContent className="p-8 md:p-10">
             <ul className="space-y-4 text-foreground/70 leading-relaxed">
               {generalRules.map((rule, index) => (
-                <li key={index} className="flex items-start gap-4 group/item">
+                <li key={index} className="flex items-start gap-4 group/item p-2 -mx-2 rounded-xl hover:bg-muted/30 transition-colors duration-200">
                   {/* Number badge */}
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06] border border-border/60 text-xs font-bold text-foreground/50 mt-0.5">
                     {index + 1}

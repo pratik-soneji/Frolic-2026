@@ -54,7 +54,7 @@ export default function SocialMediaDock() {
     <div className="flex justify-center w-full py-12 bg-background border-t border-border/40">
       <div className="relative group">
         {/* The Main Pill Container */}
-        <div className="relative flex items-center gap-7 rounded-full border-border/60 bg-card px-10 py-5 shadow-sm transition-all duration-500 hover:border-border hover:shadow-md">
+        <div className="relative flex items-center gap-7 rounded-full border border-border/60 bg-card backdrop-blur-xl px-10 py-5 shadow-sm transition-all duration-500 hover:border-border hover:shadow-lg">
           {socialLinks.map((social, index) => {
             const Icon = social.icon;
             return (
@@ -64,7 +64,7 @@ export default function SocialMediaDock() {
                 aria-label={social.label}
                 className="group/icon relative flex items-center justify-center"
               >
-                <Icon className={`h-6 w-6 text-muted-foreground transition-all duration-300 group-hover/icon:-translate-y-1 group-hover/icon:scale-125 ${social.hoverColor}`} />
+                <Icon className={`h-6 w-6 text-muted-foreground transition-all duration-300 group-hover/icon:-translate-y-1.5 group-hover/icon:scale-125 ${social.hoverColor} group-hover/icon:drop-shadow-lg`} />
               </a>
             );
           })}

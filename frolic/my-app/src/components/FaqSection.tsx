@@ -83,9 +83,9 @@ export default function FaqSection() {
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="border border-border/60 bg-card rounded-xl overflow-hidden transition-colors duration-200 hover:border-border data-[state=open]:border-border data-[state=open]:bg-card"
+              className="border border-border/60 bg-card rounded-xl overflow-hidden transition-all duration-300 hover:border-border hover:shadow-sm data-[state=open]:border-border data-[state=open]:bg-card data-[state=open]:shadow-md data-[state=open]:border-l-2 data-[state=open]:border-l-violet-500"
             >
-              <AccordionTrigger className="px-6 py-4 text-base font-semibold text-foreground/80 hover:text-foreground hover:no-underline text-left data-[state=open]:text-foreground">
+              <AccordionTrigger className="px-6 py-4 text-base font-semibold text-foreground/80 hover:text-foreground hover:no-underline text-left data-[state=open]:text-foreground transition-colors duration-200">
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-5 pt-0 text-muted-foreground text-sm leading-relaxed border-t border-border/40">

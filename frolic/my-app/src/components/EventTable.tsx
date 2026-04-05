@@ -273,9 +273,10 @@ export default function EventsTable() {
                         justify-end
                         items-center
                         gap-1
-                        opacity-0
+                        opacity-40
                         group-hover:opacity-100
-                        transition
+                        transition-all
+                        duration-200
                       "
                     >
                       <Button
@@ -350,7 +351,7 @@ export default function EventsTable() {
           !open && setEventToDelete(null)
         }
       >
-        <AlertDialogContent className="bg-background border border-border/60">
+        <AlertDialogContent className="bg-background/95 backdrop-blur-2xl border border-border/60 rounded-2xl shadow-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle>
               Delete Event

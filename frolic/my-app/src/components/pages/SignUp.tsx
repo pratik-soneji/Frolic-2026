@@ -106,7 +106,7 @@ export default function RegisterPage() {
                 {...register("userName", { required: "Username is required" })}
                 placeholder="johndoe"
                 type="text"
-                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl shadow-sm transition-all px-4"
               />
               {errors.userName && (
                 <p className="text-xs text-red-500 pl-1">{String(errors.userName.message)}</p>
@@ -123,7 +123,7 @@ export default function RegisterPage() {
                 {...register("email", { required: "Email is required" })}
                 placeholder="you@example.com"
                 type="email"
-                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl shadow-sm transition-all px-4"
               />
               {errors.email && (
                 <p className="text-xs text-red-500 pl-1">{String(errors.email.message)}</p>
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                 type="password"
                 {...register("password", { required: "Password is required" })}
                 placeholder="••••••••"
-                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4 font-mono tracking-widest"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl shadow-sm transition-all px-4 font-mono tracking-widest"
               />
               {errors.password && (
                 <p className="text-xs text-red-500 pl-1">{String(errors.password.message)}</p>
@@ -157,7 +157,7 @@ export default function RegisterPage() {
                 type="number"
                 {...register("phone", { required: "Phone is required" })}
                 placeholder="9876543210"
-                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground rounded-xl shadow-sm transition-all px-4"
+                className="h-11 bg-card border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 rounded-xl shadow-sm transition-all px-4"
               />
               {errors.phone && (
                 <p className="text-xs text-red-500 pl-1">{String(errors.phone.message)}</p>
@@ -176,7 +176,7 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full h-11 mt-4 font-semibold bg-foreground hover:bg-foreground/90 text-background shadow-md transition-all rounded-xl flex justify-center items-center gap-2 group"
+              className="w-full h-11 mt-4 font-semibold bg-foreground hover:bg-foreground/90 text-background shadow-lg hover:shadow-xl transition-all rounded-xl flex justify-center items-center gap-2 group hover:scale-[1.01]"
             >
               {isPending ? "Creating account…" : "Continue"}
             </Button>
