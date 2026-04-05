@@ -10,18 +10,20 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import type { PublicEvent } from "./EventsPublicPage";
 
+import { API_BASE_URL } from "@/constants/url";
+
 export default function EventDetailsUser() {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [teamName, setTeamName] = useState("");
-  const [participants, setParticipants] = useState([
+  const [participants, setParticipants] = useState<{ name: string; email: string; phone: string }[]>([
     { name: "", email: "", phone: "" }
   ]);
 
   const { data: event, isLoading, error, refetch } = useQuery<PublicEvent>({
     queryKey: ["public-event", eventId],
     queryFn: async () => {
-      const res = await fetch(`https://frolic-backend-8qmc.onrender.com/api/events/public/${eventId}`,{credentials:"include"});
+      const res = await fetch(`${API_BASE_URL}/api/events/public/${eventId}`, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch event");
       const json = await res.json();
       return json.data;
@@ -37,10 +39,10 @@ export default function EventDetailsUser() {
 
   const registerMutation = useMutation({
     mutationFn: async (data: { groupName: string; participants: { name: string; email: string; phone: string }[]; eventId: string }) => {
-      const res = await fetch("https://frolic-backend-8qmc.onrender.com/api/participants/register", {
-
+      const res = await fetch(`${API_BASE_URL}/api/participants/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json",  credentials:"include" },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data)
       });
       const json = await res.json();

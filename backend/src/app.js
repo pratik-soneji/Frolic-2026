@@ -5,7 +5,7 @@ import adminRouter from "./routers/admin.route.js"
 const app = express()
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://frolic-2026-hski.vercel.app"],
+  origin: process.env.CORS_ORIGIN,
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
