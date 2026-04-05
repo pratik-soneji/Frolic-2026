@@ -12,7 +12,7 @@ import { upload } from "../middlewares/multer/multer.middleeware.js";
 const router = Router()
 
 router.route("/register").post(userExists, registerUser)
-router.route("/login").post(VerifyJWT, blockIfAuthenticated, loginUser)
+router.route("/login").post(loginUser)
 router.route("/me").get(VerifyJWT, refreshIfExpired, requireAuth, getCurrentUser)
 router.route("/logout").post(VerifyJWT, logoutUser)
 router.route("/refresh").post(refreshAccessToken)
