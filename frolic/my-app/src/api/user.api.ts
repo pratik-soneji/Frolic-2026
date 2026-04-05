@@ -5,7 +5,7 @@ export const uploadAvatar = async (file: File) => {
   formData.append("avatar", file)
 
   const res = await axios.post(
-    "http://localhost:5000/user/avatar",
+    "https://frolic-backend-8qmc.onrender.com/user/avatar",
     formData,
     {
       withCredentials: true,
