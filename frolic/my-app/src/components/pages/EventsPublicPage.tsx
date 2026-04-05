@@ -35,7 +35,7 @@ export default function EventsPublicPage() {
       // Assuming constants/api.ts contains an axios instance called apiClient or api
       // I'll use standard fetch if api is not working, but apiAdmin might exist.
       // Let's use fetch just to be safe if `api` might be named differently.
-      const res = await fetch("http://localhost:5000/api/events/all");
+      const res = await fetch("https://frolic-backend-8qmc.onrender.com/api/events/all");
       if (!res.ok) throw new Error("Failed to fetch events");
       const json = await res.json();
       return json.data;

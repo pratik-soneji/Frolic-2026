@@ -21,7 +21,7 @@ export default function EventDetailsUser() {
   const { data: event, isLoading, error, refetch } = useQuery<PublicEvent>({
     queryKey: ["public-event", eventId],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:5000/api/events/public/${eventId}`);
+      const res = await fetch(`https://frolic-backend-8qmc.onrender.com/api/events/public/${eventId}`);
       if (!res.ok) throw new Error("Failed to fetch event");
       const json = await res.json();
       return json.data;
@@ -37,7 +37,7 @@ export default function EventDetailsUser() {
 
   const registerMutation = useMutation({
     mutationFn: async (data: { groupName: string; participants: { name: string; email: string; phone: string }[]; eventId: string }) => {
-      const res = await fetch("http://localhost:5000/api/participants/register", {
+      const res = await fetch("https://frolic-backend-8qmc.onrender.com/api/participants/register", {
 
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -207,21 +207,21 @@ export default function EventDetailsUser() {
                     {winner.sequence === 1 && <div className="absolute top-0 right-0 w-1.5 h-full bg-gradient-to-b from-yellow-400 to-amber-500"></div>}
                     {winner.sequence === 2 && <div className="absolute top-0 right-0 w-1.5 h-full bg-gradient-to-b from-gray-300 to-gray-500"></div>}
                     {winner.sequence === 3 && <div className="absolute top-0 right-0 w-1.5 h-full bg-gradient-to-b from-amber-500 to-amber-700"></div>}
-                    
+
                     <h3 className="font-bold flex items-center gap-2 mb-2">
-                       <span className={`flex items-center justify-center h-7 w-7 rounded-full text-xs font-bold text-white shadow-md ${winner.sequence === 1 ? 'bg-gradient-to-br from-yellow-400 to-amber-500' : winner.sequence === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' : 'bg-gradient-to-br from-amber-500 to-amber-700'}`}>
-                         {winner.sequence}
-                       </span>
-                       <span className="text-foreground">{winner.groupName || "Individual Participant"}</span>
+                      <span className={`flex items-center justify-center h-7 w-7 rounded-full text-xs font-bold text-white shadow-md ${winner.sequence === 1 ? 'bg-gradient-to-br from-yellow-400 to-amber-500' : winner.sequence === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' : 'bg-gradient-to-br from-amber-500 to-amber-700'}`}>
+                        {winner.sequence}
+                      </span>
+                      <span className="text-foreground">{winner.groupName || "Individual Participant"}</span>
                     </h3>
-                    
+
                     <div className="text-sm text-foreground/80 pl-9 space-y-1">
-                       {winner.participants.map((p, idx) => (
-                          <div key={idx} className="flex items-center gap-1.5">
-                             <span className="font-medium">{p.name}</span>
-                             {p.isLeader ? <Badge variant="secondary" className="text-[9px] px-1.5 h-4 border-primary/20 rounded-full">Leader</Badge> : null}
-                          </div>
-                       ))}
+                      {winner.participants.map((p, idx) => (
+                        <div key={idx} className="flex items-center gap-1.5">
+                          <span className="font-medium">{p.name}</span>
+                          {p.isLeader ? <Badge variant="secondary" className="text-[9px] px-1.5 h-4 border-primary/20 rounded-full">Leader</Badge> : null}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}
@@ -236,109 +236,109 @@ export default function EventDetailsUser() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 {(event?.groupMaxParticipants || 1) > 1 && (
-                <>
-                  <div className="space-y-2 mb-4">
-                    <Label htmlFor="teamName" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Team / Group Name</Label>
-                    <Input
-                      id="teamName"
-                      placeholder="e.g. The Avengers"
-                      required
-                      value={teamName}
-                      onChange={(e) => setTeamName(e.target.value)}
-                      disabled={event.status === "Full" || registerMutation.isPending}
-                      className="h-11 rounded-xl border-border/60 bg-muted/20 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2 mb-6">
-                    <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Number of Participants</Label>
-                    <div className="flex gap-2">
-                      {[...Array((event?.groupMaxParticipants || 1) - (event?.groupMinParticipants || 1) + 1)].map((_, i) => {
-                        const count = (event?.groupMinParticipants || 1) + i;
-                        return (
-                          <Button
-                            key={count}
-                            type="button"
-                            variant={participants.length === count ? "default" : "outline"}
-                            onClick={() => handleParticipantCountChange(count)}
-                            disabled={event.status === "Full" || registerMutation.isPending}
-                            className={`flex-1 rounded-xl transition-all ${participants.length === count ? 'shadow-sm' : 'border-border/60'}`}
-                          >
-                            {count}
-                          </Button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <div className="max-h-[400px] overflow-y-auto pr-2 space-y-4">
-                {participants.map((p, index) => (
-                  <div key={index} className="p-4 bg-muted/10 border border-border/40 rounded-2xl space-y-3 hover:border-border/60 transition-colors">
-                    <h3 className="font-semibold text-sm flex items-center gap-2">
-                      <span className="flex items-center justify-center bg-primary text-primary-foreground h-5 w-5 rounded-full text-[10px] font-bold">
-                        {index + 1}
-                      </span>
-                      {index === 0 ? "Team Leader" : `Member ${index + 1}`}
-                    </h3>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-medium text-muted-foreground">Full Name</Label>
+                  <>
+                    <div className="space-y-2 mb-4">
+                      <Label htmlFor="teamName" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Team / Group Name</Label>
                       <Input
-                        placeholder="John Doe"
+                        id="teamName"
+                        placeholder="e.g. The Avengers"
                         required
-                        value={p.name}
-                        onChange={(e) => updateParticipant(index, "name", e.target.value)}
+                        value={teamName}
+                        onChange={(e) => setTeamName(e.target.value)}
                         disabled={event.status === "Full" || registerMutation.isPending}
-                        className="h-10 rounded-xl border-border/50 bg-background focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
+                        className="h-11 rounded-xl border-border/60 bg-muted/20 focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
                       />
                     </div>
-
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-medium text-muted-foreground">Email Address</Label>
-                      <Input
-                        type="email"
-                        placeholder="john@example.com"
-                        required
-                        value={p.email}
-                        onChange={(e) => updateParticipant(index, "email", e.target.value)}
-                        disabled={event.status === "Full" || registerMutation.isPending}
-                        className="h-10 rounded-xl border-border/50 bg-background focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
-                      />
+                    <div className="space-y-2 mb-6">
+                      <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Number of Participants</Label>
+                      <div className="flex gap-2">
+                        {[...Array((event?.groupMaxParticipants || 1) - (event?.groupMinParticipants || 1) + 1)].map((_, i) => {
+                          const count = (event?.groupMinParticipants || 1) + i;
+                          return (
+                            <Button
+                              key={count}
+                              type="button"
+                              variant={participants.length === count ? "default" : "outline"}
+                              onClick={() => handleParticipantCountChange(count)}
+                              disabled={event.status === "Full" || registerMutation.isPending}
+                              className={`flex-1 rounded-xl transition-all ${participants.length === count ? 'shadow-sm' : 'border-border/60'}`}
+                            >
+                              {count}
+                            </Button>
+                          )
+                        })}
+                      </div>
                     </div>
+                  </>
+                )}
 
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-medium text-muted-foreground">Phone Number</Label>
-                      <Input
-                        type="tel"
-                        placeholder="+91 98765 43210"
-                        required
-                        value={p.phone}
-                        onChange={(e) => updateParticipant(index, "phone", e.target.value)}
-                        disabled={event.status === "Full" || registerMutation.isPending}
-                        className="h-10 rounded-xl border-border/50 bg-background focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
-                      />
+                <div className="max-h-[400px] overflow-y-auto pr-2 space-y-4">
+                  {participants.map((p, index) => (
+                    <div key={index} className="p-4 bg-muted/10 border border-border/40 rounded-2xl space-y-3 hover:border-border/60 transition-colors">
+                      <h3 className="font-semibold text-sm flex items-center gap-2">
+                        <span className="flex items-center justify-center bg-primary text-primary-foreground h-5 w-5 rounded-full text-[10px] font-bold">
+                          {index + 1}
+                        </span>
+                        {index === 0 ? "Team Leader" : `Member ${index + 1}`}
+                      </h3>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">Full Name</Label>
+                        <Input
+                          placeholder="John Doe"
+                          required
+                          value={p.name}
+                          onChange={(e) => updateParticipant(index, "name", e.target.value)}
+                          disabled={event.status === "Full" || registerMutation.isPending}
+                          className="h-10 rounded-xl border-border/50 bg-background focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">Email Address</Label>
+                        <Input
+                          type="email"
+                          placeholder="john@example.com"
+                          required
+                          value={p.email}
+                          onChange={(e) => updateParticipant(index, "email", e.target.value)}
+                          disabled={event.status === "Full" || registerMutation.isPending}
+                          className="h-10 rounded-xl border-border/50 bg-background focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">Phone Number</Label>
+                        <Input
+                          type="tel"
+                          placeholder="+91 98765 43210"
+                          required
+                          value={p.phone}
+                          onChange={(e) => updateParticipant(index, "phone", e.target.value)}
+                          disabled={event.status === "Full" || registerMutation.isPending}
+                          className="h-10 rounded-xl border-border/50 bg-background focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:border-violet-500/50 transition-all"
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="pt-4">
-                <Button
-                  type="submit"
-                  className={`w-full py-6 text-base font-semibold rounded-xl transition-all duration-300 ${event.status === "Full" ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground hover:scale-[1.01] hover:shadow-lg shadow-sm"
-                    }`}
-                  disabled={event.status === "Full" || registerMutation.isPending}
-                >
-                  {event.status === "Full"
-                    ? "Event is Full"
-                    : registerMutation.isPending
-                      ? "Registering..."
-                      : "Confirm Registration"
-                  }
-                </Button>
-              </div>
-            </form>
-          </div>
+                <div className="pt-4">
+                  <Button
+                    type="submit"
+                    className={`w-full py-6 text-base font-semibold rounded-xl transition-all duration-300 ${event.status === "Full" ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground hover:scale-[1.01] hover:shadow-lg shadow-sm"
+                      }`}
+                    disabled={event.status === "Full" || registerMutation.isPending}
+                  >
+                    {event.status === "Full"
+                      ? "Event is Full"
+                      : registerMutation.isPending
+                        ? "Registering..."
+                        : "Confirm Registration"
+                    }
+                  </Button>
+                </div>
+              </form>
+            </div>
           )}
         </div>
       </div>
