@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://frolic-backend-8qmc.onrender.com/:path*"
+    }
+  ]
+}
