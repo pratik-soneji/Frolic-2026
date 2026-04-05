@@ -1,0 +1,11 @@
+src/App.tsx(3,1): error TS6133: 'Signup' is declared but its value is never read.
+src/components/app-sidebar.tsx(9,3): error TS6133: 'FileText' is declared but its value is never read.
+src/components/app-sidebar.tsx(10,3): error TS6133: 'Settings' is declared but its value is never read.
+src/components/EventImageGrid.tsx(70,26): error TS2339: Property 'description' does not exist on type '{ id: number; title: string; category: string; mode: string; image: string; }'.
+src/components/EventImageGrid.tsx(75,34): error TS2339: Property 'date' does not exist on type '{ id: number; title: string; category: string; mode: string; image: string; }'.
+src/components/Navbar.tsx(14,1): error TS6192: All imports in import declaration are unused.
+src/components/Navbar.tsx(48,28): error TS6133: 'user' is declared but its value is never read.
+src/components/pages/tasks.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/pages/tasks.tsx(17,3): error TS6133: 'User' is declared but its value is never read.
+src/components/pages/tasks.tsx(22,29): error TS6133: 'CardDescription' is declared but its value is never read.
+src/components/pages/tasks.tsx(22,69): error TS6133: 'CardFooter' is declared but its value is never read.

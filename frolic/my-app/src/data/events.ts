@@ -1,4 +1,14 @@
-export const events = [
+export interface Event {
+  id: number;
+  title: string;
+  category: string;
+  mode: string;
+  image: string;
+  description?: string;
+  date?: string;
+}
+
+export const events: Event[] = [
     {
       id: 1,
       title: "BRAND COP 2025",

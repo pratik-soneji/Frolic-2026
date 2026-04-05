@@ -6,8 +6,6 @@ import {
   CalendarDays,
   Users,
   Trophy,
-  FileText,
-  Settings,
   LogOut,
   ShieldCheck
 } from "lucide-react"

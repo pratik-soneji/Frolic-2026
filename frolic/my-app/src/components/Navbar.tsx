@@ -11,7 +11,6 @@ import {
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAuth } from "@/helpers/useAuth"
 import { Separator } from "./ui/separator"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { useAuthStore } from "@/store/useAuthStore"
 import { useMutation } from "@tanstack/react-query"
 import ProfileMenu from "./profile-menu"
@@ -45,7 +44,7 @@ export default function Navbar() {
 
   const [open, setOpen] = useState(false)
 
-  const { isAuthenticated, user } = useAuth()
+  const { isAuthenticated } = useAuth()
   const { mutate: handleLogout } = useLogout()
 
   const { theme, toggleTheme } = useTheme()

@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   Search, 
   MapPin, 
@@ -13,13 +12,12 @@ import {
   Laptop,
   ArrowRight,
   Menu,
-  Clock,
-  User
+  Clock
 } from 'lucide-react';
 
 // Assuming you have these components in your @/components/ui folder
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
