@@ -28,7 +28,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   checkAuth: async () => {
     try {
-      const res = await api.get("/me")
+      const res = await api.get("/me", {
+        withCredentials: true,
+      })
 
       set({
         user: res.data.data.user,
@@ -46,7 +48,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: async () => {
     try {
-      await api.post("/logout")
+      await api.post("/logout", {
+        withCredentials: true,
+      })
     } catch (error) {
       console.error("Logout Error:", error)
     }
