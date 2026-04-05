@@ -21,7 +21,7 @@ export default function EventDetailsUser() {
   const { data: event, isLoading, error, refetch } = useQuery<PublicEvent>({
     queryKey: ["public-event", eventId],
     queryFn: async () => {
-      const res = await fetch(`https://frolic-backend-8qmc.onrender.com/api/events/public/${eventId}`);
+      const res = await fetch(`https://frolic-backend-8qmc.onrender.com/api/events/public/${eventId}`,{credentials:"include"});
       if (!res.ok) throw new Error("Failed to fetch event");
       const json = await res.json();
       return json.data;
@@ -40,7 +40,7 @@ export default function EventDetailsUser() {
       const res = await fetch("https://frolic-backend-8qmc.onrender.com/api/participants/register", {
 
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",  credentials:"include" },
         body: JSON.stringify(data)
       });
       const json = await res.json();

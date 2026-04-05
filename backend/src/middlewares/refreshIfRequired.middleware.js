@@ -27,9 +27,9 @@ export const refreshIfExpired = asyncHandler(async (req, res, next) => {
       );
   
       res.cookie("accessToken", newAccessToken, {
-        httpOnly: true,
+         httpOnly: true,
         secure: true,
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: Number(process.env.ACCESS_TOKEN_EXPIRY) * 1000
       });
   

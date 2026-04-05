@@ -35,7 +35,7 @@ export default function EventsPublicPage() {
       // Assuming constants/api.ts contains an axios instance called apiClient or api
       // I'll use standard fetch if api is not working, but apiAdmin might exist.
       // Let's use fetch just to be safe if `api` might be named differently.
-      const res = await fetch("https://frolic-backend-8qmc.onrender.com/api/events/all");
+      const res = await fetch("https://frolic-backend-8qmc.onrender.com/api/events/all", { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch events");
       const json = await res.json();
       return json.data;
@@ -131,8 +131,8 @@ export default function EventsPublicPage() {
                   <Link to={`/events/${event.eventId}`} className="w-full block">
                     <button
                       className={`w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 ${event.status === "Open"
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md"
-                          : "bg-muted text-muted-foreground cursor-not-allowed"
+                        ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md"
+                        : "bg-muted text-muted-foreground cursor-not-allowed"
                         }`}
                       disabled={event.status !== "Open"}
                     >
