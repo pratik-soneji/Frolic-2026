@@ -1,2 +1,2 @@
-export const url = 'http://localhost:5000/user';
-export const urlAdmin = 'http://localhost:5000/admin';
+export const url = 'https://frolic-backend-8qmc.onrender.com/user';
+export const urlAdmin = 'https://frolic-backend-8qmc.onrender.com/admin';
