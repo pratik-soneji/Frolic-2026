@@ -14,6 +14,13 @@ import UsersTable from "./components/UserTable";
 import EventsTable from "./components/EventTable";
 import InstituteTable from "./components/InstituteTable";
 import DepartmentTable from "./components/DepartmentTable";
+import EventPreviewPage from "./components/pages/admin/EventPreviewPage";
+import ParticipantsTable from "./components/ParticipantsTable";
+
+import EventDetailsUser from "./components/pages/EventDetailsUser";
+import AdminDashboardOverview from "./components/pages/AdminDashboardOverview";
+import WinnersTable from "./components/WinnersTable";
+
 const queryClient = new QueryClient();
 
 // Apply saved theme before first render to avoid flash
@@ -36,12 +43,17 @@ ReactDOM.createRoot(
           <Route path="/" element={<Dashboard />}>
             <Route path="" element={<Navbar />} />
           </Route>
+          <Route path="/events/:eventId" element={<div className="min-h-screen bg-background"><Navbar /><EventDetailsUser /></div>} />
+          
           <Route path="/admin" element={<AdminDashboard />}>
-            <Route path="" element={<UsersTable />} />
+            <Route path="" element={<AdminDashboardOverview />} />
+            <Route path="users" element={<UsersTable />} />
             <Route path="events" element={<EventsTable />} />
+            <Route path="events/:eventId" element={<EventPreviewPage />} />
             <Route path="institutes" element={<InstituteTable />} />
             <Route path="departments" element={<DepartmentTable />} />
-
+            <Route path="participants" element={<ParticipantsTable />} />
+            <Route path="winners" element={<WinnersTable />} />
           </Route>
           <Route path="/signup" element={<RegisterPage />} />
           <Route path="/task" element={<FindItLanding />} />

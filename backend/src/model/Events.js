@@ -10,6 +10,9 @@ import mongoose from "mongoose";
     eventImageUrl: {
       type: String,
     },
+    imageUrl: {
+      type: String,
+    },
 
     eventDescription: String,
     groupMinParticipants: Number,
@@ -26,7 +29,7 @@ import mongoose from "mongoose";
 
     departmentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Department",
+      ref: "Departments",
       required: true,
     },
   

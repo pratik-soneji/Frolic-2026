@@ -5,6 +5,9 @@ import { User } from "../model/Users.js";
 import { Events } from "../model/Events.js";
 import { Institutes } from "../model/Institue.js";
 import { Departments } from "../model/Department.model.js";
+import { Participants } from "../model/Participant.js";
+import { Groups } from "../model/Groups.js";
+import { EventWiseWinners } from "../model/EventWinners.js";
 import bcrypt from 'bcrypt'
 import { generateAccessAndRefreshToken } from "./user.controller.js";
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -252,4 +255,135 @@ const updateDepartmentCoordinator = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, updated, "Department coordinator updated successfully"));
 });
 
-export { getAllUsers, getAllEvents, addUser, deleteUser, getInstitutes, addInstitute, updateUserRole, updateInstituteCoordinator, getDepartments, addDepartment, updateDepartmentCoordinator }
+const getAllParticipants = asyncHandler(async (req, res) => {
+    const participants = await Participants.find().populate({
+        path: "groupId",
+        populate: {
+            path: "eventId",
+            select: "eventName createdAt"
+        }
+    });
+
+    const formattedParticipants = participants.map(p => ({
+        _id: p._id,
+        participantName: p.participantName,
+        participantEmail: p.participantEmail,
+        participantMobile: p.participantMobile,
+        isGroupLeader: p.isGroupLeader,
+        event: p.groupId && p.groupId.eventId ? {
+            eventId: p.groupId.eventId._id,
+            eventName: p.groupId.eventId.eventName
+        } : null,
+        registrationDate: p.createdAt
+    }));
+
+    return res.status(200).json(new ApiResponse(200, formattedParticipants, "Participants fetched successfully"));
+});
+
+const getEventParticipants = asyncHandler(async (req, res) => {
+    const { eventId } = req.params;
+
+    if (!eventId) {
+        throw new ApiError(400, "Event ID is required");
+    }
+
+    const eventGroups = await Groups.find({ eventId });
+    const groupIds = eventGroups.map(g => g._id);
+
+    const participants = await Participants.find({ groupId: { $in: groupIds } }).populate({
+        path: "groupId",
+        select: "groupName eventId"
+    });
+
+    const formattedParticipants = participants.map(p => ({
+        _id: p._id,
+        participantName: p.participantName,
+        participantEmail: p.participantEmail,
+        participantMobile: p.participantMobile,
+        isGroupLeader: p.isGroupLeader,
+        group: p.groupId ? { id: p.groupId._id, name: p.groupId.groupName } : null,
+        registrationDate: p.createdAt
+    }));
+
+    return res.status(200).json(new ApiResponse(200, formattedParticipants, "Event participants fetched successfully"));
+});
+
+const getDashboardStats = asyncHandler(async (req, res) => {
+    const totalEvents = await Events.countDocuments();
+    const totalParticipants = await Participants.countDocuments();
+    const totalInstitutes = await Institutes.countDocuments();
+    const totalWinnersDeclared = await EventWiseWinners.distinct("eventId").then(res => res.length);
+    
+    const last7Days = new Date();
+    last7Days.setDate(last7Days.getDate() - 7);
+    
+    // Safety check fallback
+    const recentActivity = await Participants.aggregate([
+        { $match: { createdAt: { $gte: last7Days } } },
+        { 
+            $group: { 
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, 
+                count: { $sum: 1 } 
+            } 
+        },
+        { $sort: { _id: 1 } }
+    ]) || [];
+    
+    return res.status(200).json(new ApiResponse(200, {
+        totalEvents,
+        totalParticipants,
+        totalInstitutes,
+        totalWinnersDeclared,
+        recentActivity
+    }, "Stats fetched successfully"));
+});
+
+const getWinners = asyncHandler(async (req, res) => {
+    const winners = await EventWiseWinners.find()
+        .populate("eventId", "eventName eventLocation")
+        .populate("groupId", "groupName")
+        .sort({ eventId: 1, sequence: 1 });
+        
+    return res.status(200).json(new ApiResponse(200, winners, "Winners fetched successfully"));
+});
+
+const declareWinners = asyncHandler(async (req, res) => {
+    const { eventId } = req.params;
+    const { winners } = req.body; 
+    const adminId = req.user._id;
+
+    if (!eventId || !winners || !winners.length) {
+        throw new ApiError(400, "Event ID and winners array are required");
+    }
+
+    for (let w of winners) {
+        const group = await Groups.findById(w.groupId);
+        if (!group) throw new ApiError(404, `Group ${w.groupId} not found`);
+        if (group.eventId.toString() !== eventId) {
+            throw new ApiError(400, `Group ${w.groupId} did not participate in this event`);
+        }
+    }
+
+    await EventWiseWinners.deleteMany({ eventId });
+
+    const newWinners = winners.map(w => ({
+        eventId,
+        groupId: w.groupId,
+        sequence: w.sequence,
+        modifiedBy: adminId
+    }));
+
+    const savedWinners = await EventWiseWinners.insertMany(newWinners);
+
+    return res.status(200).json(new ApiResponse(200, savedWinners, "Winners declared successfully"));
+});
+
+const deleteWinners = asyncHandler(async (req, res) => {
+    const { eventId } = req.params;
+    if (!eventId) throw new ApiError(400, "Event ID is required");
+
+    await EventWiseWinners.deleteMany({ eventId });
+    return res.status(200).json(new ApiResponse(200, null, "Winners revoked successfully"));
+});
+
+export { getAllUsers, getAllEvents, addUser, deleteUser, getInstitutes, addInstitute, updateUserRole, updateInstituteCoordinator, getDepartments, addDepartment, updateDepartmentCoordinator, getAllParticipants, getEventParticipants, getDashboardStats, getWinners, declareWinners, deleteWinners };

@@ -15,14 +15,19 @@ export const uploadAvatar = asyncHandler(async (req, res) => {
   }
 
   // convert buffer → base64
-  const base64 = file.buffer.toString("base64");
+  const uploadStream = () =>
+    new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: "avatars" },
+        (error, result) => {
+          if (result) resolve(result);
+          else reject(error);
+        }
+      ).end(file.buffer);
+    });
+
   console.log("vhere");
-  const result = await cloudinary.uploader.upload(
-    `data:${file.mimetype};base64,${base64}`,
-    {
-      folder: "avatars",
-    }
-  );
+  const result = await uploadStream();
   console.log("here");
   if (!result?.secure_url) {
     throw new ApiError(500, "Cloudinary upload failed");

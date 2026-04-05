@@ -1,23 +1,67 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, PlayCircle } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/helpers/useAuth";
-import EventImageGrid from "../EventImageGrid";
 import RulesSection from "../RulesSection";
 import FaqSection from "../FaqSection";
 import SocialMediaDock from "../SocialMedia";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect } from "react";
+import EventsPublicPage from "./EventsPublicPage";
+import FacilitiesSection from "../FacilitiesSection";
+import ContactUsSection from "../ContactUsSection";
+import useScrollRestoration from "@/hooks/scroll";
+import { useLocation } from "react-router-dom";
 
 export default function StudentWelcome() {
   const navigate = useNavigate();
+  const { hash } = useLocation();
   const { isAuthenticated } = useAuth();
   const checkAuth = useAuthStore((s) => s.checkAuth);
+
+  useScrollRestoration();
 
   useEffect(() => {
     checkAuth();
   }, []);
+
+  useEffect(() => {
+    if (hash) {
+      setTimeout(() => {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          const offset = 80;
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = element.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
+  }, [hash]);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <div className="relative min-h-screen w-full bg-background text-foreground font-sans selection:bg-foreground/10 overflow-hidden">
@@ -61,7 +105,7 @@ export default function StudentWelcome() {
 
           <Button
             variant="outline"
-            onClick={() => navigate("/events")}
+            onClick={() => scrollToSection('events')}
             className="rounded-full border-[#0071e3] text-[#0071e3] hover:bg-[#0071e3]/10 bg-transparent px-6 h-10 text-[15px] font-medium transition-all"
           >
             Explore Events
@@ -127,9 +171,17 @@ export default function StudentWelcome() {
       <div className="relative z-20 bg-background">
         <Outlet />
         <SocialMediaDock />
-        <EventImageGrid />
-        <RulesSection />
-        <FaqSection />
+        <section id="events">
+          <EventsPublicPage />
+        </section>
+        <section id="rules">
+          <RulesSection />
+        </section>
+        <FacilitiesSection />
+        <section id="faq">
+          <FaqSection />
+        </section>
+        <ContactUsSection />
       </div>
 
     </div>

@@ -1,29 +1,31 @@
- const GroupSchema = new mongoose.Schema({
-    groupName: {
-      type: String,
-      required: true,
-    },
+import mongoose from "mongoose";
 
-    eventId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Event",
-      required: true,
-    },
+const GroupSchema = new mongoose.Schema({
+  groupName: {
+    type: String,
+    required: true,
+  },
 
-    isPaymentDone: {
-      type: Boolean,
-      default: false,
-    },
+  eventId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Events",
+    required: true,
+  },
 
-    isPresent: {
-      type: Boolean,
-      default: false,
-    },
-    
-    modifiedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
-      required: true,
-    },
-  }, { timestamps: true });
-  export const Groups = mongoose.model('Groups', GroupSchema)
+  isPaymentDone: {
+    type: Boolean,
+    default: false,
+  },
+
+  isPresent: {
+    type: Boolean,
+    default: false,
+  },
+
+  modifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+}, { timestamps: true });
+export const Groups = mongoose.model('Groups', GroupSchema)

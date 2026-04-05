@@ -51,12 +51,12 @@ const navMain = [
 
 const navPeople = [
   { title: "Users & Coordinators", url: "/admin/users", icon: Users },
-  { title: "Groups & Participants", url: "/admin/groups", icon: Users },
+  { title: "Participants", url: "/admin/participants", icon: Users },
 ]
 
 const navResults = [
   { title: "Winners", url: "/admin/winners", icon: Trophy },
-  { title: "Reports", url: "/admin/reports", icon: FileText },
+
 ]
 
 const NavItem = ({ item, isActive }: { item: typeof navMain[0], isActive: boolean }) => (
@@ -88,6 +88,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       collapsible="icon"
+      
       {...props}
     >
       {/* Header */}
@@ -157,18 +158,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarFooter className="px-2 py-2">
         <SidebarMenu className="space-y-0.5">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              tooltip="Settings"
-              className="text-sidebar-foreground/40 hover:text-sidebar-foreground/70 hover:bg-sidebar-accent/50 rounded-lg transition-colors border border-transparent"
-            >
-              <Link to="/admin/settings" className="flex items-center gap-2.5">
-                <Settings className="h-4 w-4" />
-                <span className="text-sm font-medium">Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+
           <SidebarMenuItem>
             <SidebarMenuButton 
               onClick={() => handleLogout()}

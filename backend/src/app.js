@@ -20,7 +20,12 @@ app.use(cookieParser())
 app.use(express.static("public"))
 
 import userRouter from "./routers/user.route.js"
+import eventRouter from "./routers/event.routes.js"
+import participantRouter from "./routers/participant.routes.js"
+
 app.use("/user", userRouter)
 app.use("/admin", adminRouter)
+app.use("/api/events", eventRouter)
+app.use("/api/participants", participantRouter)
 
 export { app }

@@ -1,13 +1,15 @@
- const EventWiseWinnerSchema = new mongoose.Schema({
+import mongoose from "mongoose";
+
+const EventWiseWinnerSchema = new mongoose.Schema({
     eventId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Event",
+      ref: "Events",
       required: true,
     },
   
     groupId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Group",
+      ref: "Groups",
       required: true,
     },
 

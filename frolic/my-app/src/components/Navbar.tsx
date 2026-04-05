@@ -7,7 +7,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useAuth } from "@/helpers/useAuth"
 import { Separator } from "./ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
@@ -39,12 +39,18 @@ const useLogout = () => {
 
 export default function Navbar() {
   const nav = useNavigate();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false)
   const { isAuthenticated, user } = useAuth();
   const { mutate: handleLogout } = useLogout();
   const { theme, toggleTheme } = useTheme();
 
   const scrollToSection = (id: string) => {
+    if (pathname !== "/") {
+      nav(`/#${id}`);
+      return;
+    }
+    
     const element = document.getElementById(id);
     if (element) {
       const offset = 80;
