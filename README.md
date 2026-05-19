@@ -1,75 +1,239 @@
-# Frolic 2026: Institutional Event Management Platform
+# 🎉 Frolic 2026 — Institutional Event Management Platform
 
-![Frolic Banner](https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge) ![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react) ![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js) ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)
+<div align="center">
 
-**Frolic 2026** is a full-stack, comprehensive event management system designed for large-scale institutional festivals. The platform handles everything from complex multi-tier organizational structures (Institutes → Departments → Events) to role-based access control, participant registrations, group formations, and media uploads. 
+### A modern full-stack event management ecosystem built for large-scale institutional festivals
 
----
+*From registrations and team formations to coordinator workflows, media handling, and winner declarations.*
 
-## 🚀 Features (Currently Implemented)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js)
+![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat-square&logo=tailwindcss)
+![Zustand](https://img.shields.io/badge/Zustand-black?style=flat-square)
+![React Query](https://img.shields.io/badge/React_Query-FF4154?style=flat-square&logo=react-query)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=flat-square&logo=cloudinary)
 
-- **Role-Based Access Control (RBAC):** Distinct dashboards and access levels for system Admins, Coordinators (Institute/Department/Event/Student), and standard Users.
-- **Hierarchical Organization:** Dynamic management of `Institutes` > `Departments` > `Events`.
-- **Advanced Registration System:** Supports both individual and group event registrations, including dynamic team sizes (`groupMinParticipants` to `groupMaxParticipants`).
-- **Cloud Media Pipeline:** Direct integration with Cloudinary via Multer for uploading user avatars and event banners.
-- **Dual-Token Authentication:** Secure JWT-based system utilizing short-lived access tokens and long-lived refresh tokens, managed via `httpOnly` secure cookies.
-- **Admin Control Panel:** Fully functional data tables with CRUD capabilities to monitor Users, Events, Institutes, Departments, Participants, and Winners.
-- **Winner Declaration Engine:** Dedicated system to declare, store, and display event winners.
-- **Client-Side State & Caching:** Utilizes `Zustand` for global state (auth, themes) and `@tanstack/react-query` for asynchronous API state and caching.
-- **Persistent Dark Mode:** Built-in theming system with local storage persistence.
-
----
-
-## 🏗️ Architecture Overview
-
-The project is built on a decoupled client-server architecture:
-
-- **Frontend (`/frolic/my-app`):** A modern React 19 Single Page Application built with Vite. It uses `shadcn/ui` and `Tailwind CSS v4` for a premium, accessible design system. Data fetching is abstracted via `axios` instances integrated with React Query.
-- **Backend (`/backend`):** A RESTful API built on Express 5. It uses a robust middleware chain for authentication (`VerifyJWT`, `refreshIfExpired`) and file processing (`upload`).
-- **Database:** MongoDB acts as the primary data store, using Mongoose 9 for strict schema validation and complex document relations.
+</div>
 
 ---
 
-## 💻 Tech Stack
+# ✨ Overview
 
-### Frontend
-- **Framework:** React 19, React Router DOM v7
-- **Build Tool:** Vite (Rolldown)
-- **Styling:** Tailwind CSS v4, shadcn/ui, Framer Motion
-- **State Management:** Zustand (Global), TanStack React Query v5 (Server State)
-- **Forms & Validation:** React Hook Form, Zod
-- **Icons & Visuals:** Lucide React, Recharts
+**Frolic 2026** is a comprehensive full-stack institutional event management platform engineered to simplify large-scale festival operations.
 
-### Backend
-- **Runtime:** Node.js
-- **Framework:** Express.js v5
-- **Database:** MongoDB via Mongoose v9
-- **Security:** bcrypt, jsonwebtoken (JWT), cookie-parser, CORS
-- **File Uploads:** Multer, Cloudinary
+Managing college or institutional events manually usually becomes a chaotic mess of spreadsheets, WhatsApp groups, duplicate registrations, confused coordinators, and lost participant data. Frolic solves that.
 
----
+The platform centralizes the complete event lifecycle into a structured, scalable ecosystem.
 
-## 🗄️ Database Overview
+It supports:
 
-The MongoDB database maintains relationships through the following Mongoose schemas:
-
-1. **`Users`**: Stores credentials, roles (`isAdmin`, `isCordinator`), coordinator scopes, and refresh tokens.
-2. **`Institutes`**: Defines parent organizations.
-3. **`Department`**: Links to an Institute and managed by a specific Coordinator.
-4. **`Events`**: Links to a Department. Stores event metadata, rules, dates, media URLs, and group size constraints.
-5. **`Participant`**: Represents an individual user's registration for an event.
-6. **`Groups`**: Handles team registrations, linking a leader and multiple participants to a specific event.
-7. **`EventWinners`**: Records event outcomes and ranking positions.
+- 🏛️ Multi-level organizational management
+- 👥 Individual & team-based registrations
+- 🔐 Secure authentication & authorization
+- 🧑‍💼 Role-based administrative dashboards
+- ☁️ Cloud media uploads
+- 🏆 Winner declaration workflows
+- 🌙 Modern responsive user experience
 
 ---
 
-## 🔒 Authentication / Authorization
+# 🚀 Core Features
 
-The system relies on a highly secure, stateless JWT architecture:
+## 🔐 Authentication & Security
 
-1. **Access Token:** Short-lived token used for verifying API requests.
-2. **Refresh Token:** Long-lived token stored securely in an `httpOnly` cookie.
-3. **Smart Middleware (`refreshIfExpired`):** Intercepts requests with expired access tokens, seamlessly exchanging the valid refresh token cookie for a new access token without logging the user out.
-4. **Role Guards (`requireAuth`):** Validates the `isAdmin` or `isCordinator` flags on the `User` document before granting access to protected routes.
+Production-style authentication architecture built with security-first principles.
+
+### Includes:
+- JWT-based Access + Refresh Token authentication
+- Secure `httpOnly` cookie session handling
+- Automatic silent token refresh
+- Password hashing using `bcrypt`
+- Protected route authorization middleware
+- Role-aware access control enforcement
+
+---
+
+## 🏛️ Hierarchical Organizational Management
+
+Frolic models real institutional structures with scoped access.
+
+```text
+Institute
+   └── Department
+          └── Event
+```
+
+### Capabilities:
+- Institute creation & management
+- Department allocation under institutes
+- Event lifecycle management
+- Scoped coordinator ownership
+- Controlled access delegation
+
+---
+
+## 👥 Advanced Registration System
+
+Flexible participant management built for multiple event formats.
+
+### Individual Registrations
+- Direct participant enrollment
+- Duplicate registration prevention
+- Eligibility validation
+
+### Group Registrations
+- Team creation workflows
+- Configurable participant limits
+- Team leader assignment
+- Member relationship tracking
+- Group participation management
+
+---
+
+## 🧑‍💼 Role-Based Dashboard System
+
+Different users, different powers. Civilization depends on permission boundaries.
+
+### Supported Roles:
+- System Administrator
+- Institute Coordinator
+- Department Coordinator
+- Event Coordinator
+- Student Coordinator
+- Standard Participant/User
+
+Each role receives scoped access to only the resources they control.
+
+---
+
+## 📊 Administrative Control Panel
+
+Centralized management dashboard with complete CRUD workflows.
+
+Manage:
+
+- Users
+- Institutes
+- Departments
+- Events
+- Participants
+- Group Registrations
+- Winners
+- Media Assets
+
+---
+
+## 🏆 Winner Declaration Engine
+
+Built-in result management workflow for competitive events.
+
+### Features:
+- Declare winners by event
+- Rank participants
+- Store historical results
+- Display final outcomes
+- Maintain structured winner records
+
+---
+
+## 🎨 Modern Frontend Experience
+
+Designed for usability, speed, and clean interaction.
+
+### UI Features:
+- Fully responsive layouts
+- Persistent dark mode
+- Smooth transitions & animations
+- Optimistic UI interactions
+- Form validation with instant feedback
+
+---
+
+# 🏗️ Architecture Overview
+
+Frolic follows a decoupled full-stack architecture.
+
+## Frontend
+
+**Location:** `/frolic/my-app`
+
+Modern SPA architecture built with:
+
+- React 19
+- Vite
+- React Router DOM v7
+- Tailwind CSS v4
+- shadcn/ui
+- Framer Motion
+- Zustand
+- TanStack React Query
+- React Hook Form
+- Zod
+
+### Responsibilities
+- Authentication flows
+- Dashboard rendering
+- Event browsing
+- Registration workflows
+- Form handling
+- Client-side state management
+- API communication
+
+---
+
+## Backend
+
+**Location:** `/backend`
+
+RESTful API architecture powered by Express.
+
+### Built With:
+- Node.js
+- Express 5
+- JWT Authentication
+- Cookie-based session management
+- Multer
+- Cloudinary
+- Custom middleware pipelines
+
+### Responsibilities
+- Authentication & authorization
+- Business logic execution
+- Registration validation
+- File upload handling
+- Database operations
+- Access control enforcement
+
+---
+
+# 💻 Tech Stack
+
+## Frontend
+- React 19
+- Vite
+- React Router DOM
+- Tailwind CSS v4
+- shadcn/ui
+- Framer Motion
+- Zustand
+- TanStack React Query
+- React Hook Form
+- Zod
+- Lucide React
+- Recharts
+
+## Backend
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JWT
+- bcrypt
+- cookie-parser
+- CORS
+- Multer
+- Cloudinary
 
 ---
